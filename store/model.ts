@@ -25,6 +25,7 @@ export type FriendContact = {
   id: string;
   name: string;
 };
+export const MAX_FRIENDS = 8;
 export const palette = [
   "#D64545",
   "#F5822A",

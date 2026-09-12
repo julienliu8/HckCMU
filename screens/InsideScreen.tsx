@@ -16,6 +16,70 @@ import { Label, PixelButton, Sheet } from "../components/PixelUI";
 function Vase({ friend, spark = 0 }: { friend: Friend; spark?: number }) {
   return <PixelBouquet flowers={friend.flowers} pot={friend.pot} spark={spark} />;
 }
+
+function RingForBloom({ onPress }: { onPress: () => void }) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Ring for bloom"
+      onPress={onPress}
+      className="items-center active:opacity-80"
+      style={({ pressed }) => ({
+        width: 76,
+        height: 66,
+        transform: [{ translateY: pressed ? 2 : 0 }],
+      })}
+    >
+      <View
+        style={{
+          width: 44,
+          height: 34,
+          marginTop: 8,
+          backgroundColor: "#F7C948",
+          borderWidth: 3,
+          borderColor: "#662305",
+        }}
+      >
+        <View
+          style={{
+            position: "absolute",
+            left: 12,
+            top: -9,
+            width: 14,
+            height: 9,
+            backgroundColor: "#F4D8B2",
+            borderWidth: 3,
+            borderColor: "#662305",
+          }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            left: 15,
+            top: 10,
+            width: 8,
+            height: 8,
+            backgroundColor: "#FFF4E3",
+          }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            left: 12,
+            top: 18,
+            width: 14,
+            height: 5,
+            backgroundColor: "#9E451C",
+          }}
+        />
+      </View>
+      <Text className="font-pixel text-[8px] text-bark mt-1">
+        RING FOR BLOOM
+      </Text>
+    </Pressable>
+  );
+}
+
 export function InsideScreen({
   night,
   onExitHouse,
@@ -24,12 +88,29 @@ export function InsideScreen({
   onExitHouse: () => void;
 }) {
   const friends = useVillage((s) => s.friends);
+  const demoFriendBloom = useVillage((s) => s.demoFriendBloom);
   const [selected, setSelected] = useState<string | null>(null);
-  const [spark, setSpark] = useState(0);
+  const [sparkByFriend, setSparkByFriend] = useState<Record<string, number>>({});
   const [sent, setSent] = useState(false);
+  const [demoNotice, setDemoNotice] = useState("");
   const friend = friends.find((f) => f.id === selected);
+  const bloomForDemo = (friendId?: string) => {
+    const result = demoFriendBloom(friendId);
+    if (!result) return;
+    setSparkByFriend((sparks) => ({
+      ...sparks,
+      [result.friendId]: (sparks[result.friendId] ?? 0) + 1,
+    }));
+    setDemoNotice(`${result.friendName}'s vase bloomed.`);
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
+  };
   const prune = () => {
-    setSpark((s) => s + 1);
+    if (friend) {
+      setSparkByFriend((sparks) => ({
+        ...sparks,
+        [friend.id]: (sparks[friend.id] ?? 0) + 1,
+      }));
+    }
     void Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Success,
     ).catch(() => {});
@@ -101,6 +182,17 @@ export function InsideScreen({
               style={{ height: 4, width: "100%", top: 30 }}
             />
           </View>
+          <View className="items-center mb-2">
+            <RingForBloom onPress={() => bloomForDemo()} />
+            {demoNotice.length > 0 && (
+              <Text
+                accessibilityRole="alert"
+                className="font-pixel text-[9px] text-moss mt-1"
+              >
+                {demoNotice.toUpperCase()}
+              </Text>
+            )}
+          </View>
           <View className="flex-row flex-wrap justify-center">
             {friends.map((f, i) => (
               <View
@@ -122,7 +214,7 @@ export function InsideScreen({
                     alignItems: "center",
                   })}
                 >
-                  <Vase friend={f} />
+                  <Vase friend={f} spark={sparkByFriend[f.id] ?? 0} />
                   <Text className="font-pixel font-bold text-xs text-bark mb-2">
                     {f.name}
                   </Text>
@@ -137,9 +229,7 @@ export function InsideScreen({
                     borderColor: "#662305",
                   }}
                 />
-                <View
-                     style={{ width: 9, height: 11, backgroundColor: "#662305" }}
-                />
+                <View style={{ width: 9, height: 11, backgroundColor: "#662305" }} />
               </View>
             ))}
           </View>
@@ -164,7 +254,7 @@ export function InsideScreen({
           onClose={() => setSelected(null)}
         >
           <View className="items-center">
-            <Vase friend={friend} spark={spark} />
+            <Vase friend={friend} spark={sparkByFriend[friend.id] ?? 0} />
             <Label>{friend.note}</Label>
           </View>
           <Text className="text-center text-bark leading-6">
@@ -172,6 +262,11 @@ export function InsideScreen({
             them.
           </Text>
           <PixelButton label="PRUNE VASE ✦" onPress={prune} />
+          <PixelButton
+            light
+            label="RING FOR BLOOM"
+            onPress={() => bloomForDemo(friend.id)}
+          />
           {sent && (
             <View
               accessibilityRole="alert"

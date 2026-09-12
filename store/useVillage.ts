@@ -5,6 +5,7 @@ import {
   Bloom,
   Shape,
   Feeling,
+  Friend,
   Pixels,
   FriendContact,
   createHistory,
@@ -13,6 +14,7 @@ import {
   paintPixel,
   localDay,
   palette,
+  MAX_FRIENDS,
 } from "./model";
 type VillageState = {
   history: Bloom[];
@@ -32,6 +34,7 @@ type VillageState = {
   resetPot: () => void;
   trim: (id: string) => void;
   plant: () => boolean;
+  demoFriendBloom: (friendId?: string) => { friendId: string; friendName: string } | null;
 };
 export const useVillage = create<VillageState>()(
   persist(
@@ -64,6 +67,7 @@ export const useVillage = create<VillageState>()(
         const id = contact.id.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
         const name = contact.name.trim();
         if (!id || !name || id === get().profile.id) return false;
+        if (get().contacts.length >= MAX_FRIENDS) return false;
         if (get().contacts.some((c) => c.id === id)) return false;
         set((s) => ({
           contacts: [...s.contacts, { id, name: name.slice(0, 24) }],
@@ -92,6 +96,30 @@ export const useVillage = create<VillageState>()(
           draft: { ...s.draft, journal: "" },
         }));
         return true;
+      },
+      demoFriendBloom: (friendId) => {
+        const shapes: Shape[] = ["daisy", "tulip", "star"];
+        const friends = get().friends;
+        const index = friendId
+          ? friends.findIndex((friend) => friend.id === friendId)
+          : Math.floor(Math.random() * friends.length);
+        const friend = friends[index];
+        if (!friend) return null;
+        const nextFlower = {
+          shape: shapes[Math.floor(Math.random() * shapes.length)],
+          color: palette[Math.floor(Math.random() * palette.length)],
+        };
+        set((s) => ({
+          friends: s.friends.map((item) =>
+            item.id === friend.id
+              ? {
+                  ...item,
+                  flowers: [...item.flowers.slice(1), nextFlower] as Friend["flowers"],
+                }
+              : item,
+          ),
+        }));
+        return { friendId: friend.id, friendName: friend.name };
       },
     }),
     {

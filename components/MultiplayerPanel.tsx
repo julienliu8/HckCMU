@@ -3,7 +3,7 @@ import { View, Text, Pressable, TextInput } from "react-native";
 import { useRoom } from "../store/useRoom";
 import { useVillage } from "../store/useVillage";
 import { Gift } from "../store/gifting";
-import { Shape, palette } from "../store/model";
+import { MAX_FRIENDS, Shape, palette } from "../store/model";
 import { PixelBouquet, PixelFlower } from "./PixelArt";
 import { PixelButton, Label, Sheet } from "./PixelUI";
 
@@ -51,6 +51,7 @@ export function MultiplayerPanel() {
     () => gifts.filter((g) => g.recipientId === profile.id),
     [gifts, profile.id],
   );
+  const friendLimitReached = contacts.length >= MAX_FRIENDS;
 
   const senders = [...new Set(received.map((g) => g.senderId))];
   const begin = (id?: string) => {
@@ -96,7 +97,9 @@ export function MultiplayerPanel() {
       </View>
 
       <View className="border-t border-[#D8B58A] pt-4 gap-2">
-        <Text className="font-pixel text-xs text-bark">YOUR FRIENDS · {contacts.length}</Text>
+        <Text className="font-pixel text-xs text-bark">
+          YOUR FRIENDS · {contacts.length}/{MAX_FRIENDS}
+        </Text>
         {!contacts.length ? (
           <Text className="text-xs text-bark leading-5">
             Add a friend to start sharing flowers across devices.
@@ -136,11 +139,19 @@ export function MultiplayerPanel() {
         )}
         <View className="gap-2 border-2 border-[#D8B58A] bg-[#FCE7CC] p-3">
           <Text className="font-pixel text-[10px] text-bark">ADD A FRIEND</Text>
+          <Text className="text-xs text-bark leading-5">
+            {friendLimitReached
+              ? `Your shelf has room for ${MAX_FRIENDS} friends. Remove one to make space for someone new.`
+              : `There is room for ${MAX_FRIENDS - contacts.length} more ${
+                  MAX_FRIENDS - contacts.length === 1 ? "friend" : "friends"
+                }.`}
+          </Text>
           <TextInput
             accessibilityLabel="Friend name"
             value={friendName}
             onChangeText={setFriendName}
             maxLength={24}
+            editable={!friendLimitReached}
             className="border border-bark p-2 text-bark text-xs"
             placeholder="Friend name"
             placeholderTextColor="#866648"
@@ -152,20 +163,26 @@ export function MultiplayerPanel() {
             autoCapitalize="none"
             autoCorrect={false}
             maxLength={32}
+            editable={!friendLimitReached}
             className="border border-bark p-2 text-bark text-xs"
             placeholder="friend code"
             placeholderTextColor="#866648"
           />
           <PixelButton
             light
-            label="SAVE FRIEND +"
+            label={friendLimitReached ? "SHELF FULL" : "SAVE FRIEND +"}
+            disabled={friendLimitReached}
             onPress={() => {
               if (addContact({ id: friendCode, name: friendName })) {
                 setFriendName("");
                 setFriendCode("");
                 setReceipt("Friend added. You can send flowers now.");
               } else {
-                setReceipt("Could not add friend. Check name/code and try again.");
+                setReceipt(
+                  friendLimitReached
+                    ? `Your shelf has room for ${MAX_FRIENDS} friends.`
+                    : "Could not add friend. Check name/code and try again.",
+                );
               }
             }}
           />
