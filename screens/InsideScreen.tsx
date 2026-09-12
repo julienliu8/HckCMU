@@ -9,12 +9,86 @@ import {
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useVillage } from "../store/useVillage";
-import { Friend } from "../store/model";
+import { Friend, FriendFlower } from "../store/model";
 import { MultiplayerPanel } from "../components/MultiplayerPanel";
-import { PixelBouquet } from "../components/PixelArt";
+import { PixelBouquet, PixelFlower, PixelNoteTag } from "../components/PixelArt";
 import { Label, PixelButton, Sheet } from "../components/PixelUI";
-function Vase({ friend, spark = 0 }: { friend: Friend; spark?: number }) {
-  return <PixelBouquet flowers={friend.flowers} pot={friend.pot} spark={spark} />;
+
+const friendShelfPlacements = [
+  { left: 10, top: 50 },
+  { left: 30, top: 31 },
+  { left: 51, top: 12 },
+];
+
+function Vase({
+  friend,
+  spark = 0,
+  onPress,
+  onOpenNote,
+  readNoteIds = {},
+}: {
+  friend: Friend;
+  spark?: number;
+  onPress?: () => void;
+  onOpenNote?: (flower: FriendFlower, index: number) => void;
+  readNoteIds?: Record<string, boolean>;
+}) {
+  return (
+    <View style={{ width: 120, height: 155 }}>
+      {onPress ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={`Open ${friend.name}'s pot`}
+          onPress={onPress}
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          }}
+        >
+          <PixelBouquet
+            flowers={friend.flowers}
+            pot={friend.pot}
+            spark={spark}
+            placements={friendShelfPlacements}
+          />
+        </Pressable>
+      ) : (
+        <PixelBouquet
+          flowers={friend.flowers}
+          pot={friend.pot}
+          spark={spark}
+          placements={friendShelfPlacements}
+        />
+      )}
+      {onOpenNote &&
+        friend.flowers.map((flower, i) => {
+          if (!flower.note) return null;
+          const place = friendShelfPlacements[i] ?? friendShelfPlacements.at(-1)!;
+          return (
+            <View
+              key={`friend-note-${flower.id ?? `${friend.id}-${i}`}`}
+              style={{
+                position: "absolute",
+                left: place.left + 38,
+                top: place.top + 37,
+              }}
+            >
+              <PixelNoteTag
+                read={
+                  readNoteIds[
+                    flower.id ?? `${friend.id}-${i}-${flower.shape}-${flower.color}`
+                  ]
+                }
+                onPress={() => onOpenNote(flower, i)}
+              />
+            </View>
+          );
+        })}
+    </View>
+  );
 }
 
 function RingForBloom({ onPress }: { onPress: () => void }) {
@@ -93,7 +167,35 @@ export function InsideScreen({
   const [sparkByFriend, setSparkByFriend] = useState<Record<string, number>>({});
   const [sent, setSent] = useState(false);
   const [demoNotice, setDemoNotice] = useState("");
+  const [selectedNote, setSelectedNote] = useState<{
+    friendName: string;
+    flower: FriendFlower;
+  } | null>(null);
+  const [readNoteIds, setReadNoteIds] = useState<Record<string, boolean>>({});
   const friend = friends.find((f) => f.id === selected);
+  const noteId = (friendId: string, flower: FriendFlower, index: number) =>
+    flower.id ?? `${friendId}-${index}-${flower.shape}-${flower.color}`;
+  const openNote = (
+    friendId: string,
+    friendName: string,
+    flower: FriendFlower,
+    index: number,
+  ) => {
+    setReadNoteIds((ids) => ({ ...ids, [noteId(friendId, flower, index)]: true }));
+    setSelectedNote({ friendName, flower });
+  };
+  const openFriend = (nextFriend: Friend) => {
+    const latestNote = nextFriend.flowers
+      .map((flower, index) => ({ flower, index }))
+      .reverse()
+      .find(({ flower }) => flower.note);
+    if (latestNote) {
+      openNote(nextFriend.id, nextFriend.name, latestNote.flower, latestNote.index);
+      return;
+    }
+    setSelected(nextFriend.id);
+    setSent(false);
+  };
   const bloomForDemo = (friendId?: string) => {
     const result = demoFriendBloom(friendId);
     if (!result) return;
@@ -101,7 +203,7 @@ export function InsideScreen({
       ...sparks,
       [result.friendId]: (sparks[result.friendId] ?? 0) + 1,
     }));
-    setDemoNotice(`${result.friendName}'s vase bloomed.`);
+    setDemoNotice(`${result.friendName}'s vase bloomed with a note.`);
     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
   };
   const prune = () => {
@@ -202,23 +304,30 @@ export function InsideScreen({
                   alignItems: "center",
                 }}
               >
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={`Open ${f.name}'s pot`}
-                  onPress={() => {
-                    setSelected(f.id);
-                    setSent(false);
-                  }}
-                  style={({ pressed }) => ({
-                    opacity: pressed ? 0.7 : 1,
-                    alignItems: "center",
-                  })}
-                >
-                  <Vase friend={f} spark={sparkByFriend[f.id] ?? 0} />
-                  <Text className="font-pixel font-bold text-xs text-bark mb-2">
-                    {f.name}
-                  </Text>
-                </Pressable>
+                <View style={{ alignItems: "center" }}>
+                  <Vase
+                    friend={f}
+                    spark={sparkByFriend[f.id] ?? 0}
+                    onPress={() => openFriend(f)}
+                    onOpenNote={(flower, index) =>
+                      openNote(f.id, f.name, flower, index)
+                    }
+                    readNoteIds={readNoteIds}
+                  />
+                  <Pressable
+                    accessibilityRole="button"
+                    accessibilityLabel={`Open ${f.name}'s corner`}
+                    onPress={() => {
+                      setSelected(f.id);
+                      setSent(false);
+                    }}
+                    className="active:opacity-80"
+                  >
+                    <Text className="font-pixel font-bold text-xs text-bark mb-2">
+                      {f.name}
+                    </Text>
+                  </Pressable>
+                </View>
                 <View
                   style={{
                     height: 13,
@@ -254,7 +363,23 @@ export function InsideScreen({
           onClose={() => setSelected(null)}
         >
           <View className="items-center">
-            <Vase friend={friend} spark={sparkByFriend[friend.id] ?? 0} />
+            <Vase
+              friend={friend}
+              spark={sparkByFriend[friend.id] ?? 0}
+              onPress={() => {
+                const latestNote = friend.flowers
+                  .map((flower, index) => ({ flower, index }))
+                  .reverse()
+                  .find(({ flower }) => flower.note);
+                if (latestNote) {
+                  openNote(friend.id, friend.name, latestNote.flower, latestNote.index);
+                }
+              }}
+              onOpenNote={(flower, index) =>
+                openNote(friend.id, friend.name, flower, index)
+              }
+              readNoteIds={readNoteIds}
+            />
             <Label>{friend.note}</Label>
           </View>
           <Text className="text-center text-bark leading-6">
@@ -280,6 +405,28 @@ export function InsideScreen({
               </Text>
             </View>
           )}
+        </Sheet>
+      )}
+      {selectedNote && (
+        <Sheet
+          title={`A note from ${selectedNote.friendName}`}
+          onClose={() => setSelectedNote(null)}
+        >
+          <View className="items-center">
+            <PixelFlower
+              shape={selectedNote.flower.shape}
+              color={selectedNote.flower.color}
+              size={74}
+            />
+            <View
+              className="border-2 border-[#9E451C] bg-[#FFF9EF] p-4 mt-2"
+              style={{ width: "100%" }}
+            >
+              <Text className="text-bark text-base leading-7">
+                {selectedNote.flower.note}
+              </Text>
+            </View>
+          </View>
         </Sheet>
       )}
     </>

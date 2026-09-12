@@ -8,18 +8,18 @@ export type Bloom = {
   color: string;
   feeling: Feeling;
   journal: string;
-  trimmed: boolean;
+  pruned: boolean;
+};
+export type FriendFlower = Pick<Bloom, "shape" | "color"> & {
+  id?: string;
+  note?: string;
 };
 export type Friend = {
   id: string;
   name: string;
   note: string;
   pot: Pixels;
-  flowers: [
-    Pick<Bloom, "shape" | "color">,
-    Pick<Bloom, "shape" | "color">,
-    Pick<Bloom, "shape" | "color">,
-  ];
+  flowers: [FriendFlower, FriendFlower, FriendFlower];
 };
 export type FriendContact = {
   id: string;
@@ -99,7 +99,7 @@ export function createHistory(now = new Date()): Bloom[] {
         ] as Feeling[]
       )[i % 7],
       journal: notes[i % 7],
-      trimmed: false,
+      pruned: false,
     };
   });
 }

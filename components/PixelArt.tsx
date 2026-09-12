@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import Svg, { Rect } from "react-native-svg";
 import Animated, {
   useAnimatedStyle,
@@ -15,6 +15,7 @@ type BouquetFlower = {
   id?: string;
   shape: Shape;
   color: string;
+  note?: string;
 };
 
 const defaultBouquetPlacements = [
@@ -256,6 +257,65 @@ export function PixelBouquet({
       </View>
       <Spark trigger={spark} />
     </View>
+  );
+}
+export function PixelNoteTag({
+  onPress,
+  read = false,
+}: {
+  onPress: () => void;
+  read?: boolean;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={read ? "Open read note" : "Open unread note"}
+      onPress={onPress}
+      className="items-center justify-center active:opacity-80"
+      style={{
+        width: 25,
+        height: 20,
+        backgroundColor: read ? "#EAD3AF" : "#FFF4E3",
+        borderWidth: 2,
+        borderColor: read ? "#B88D5C" : "#9E451C",
+        opacity: read ? 0.72 : 1,
+      }}
+    >
+      <View
+        style={{
+          position: "absolute",
+          top: 4,
+          left: 5,
+          width: 11,
+          height: 2,
+          backgroundColor: read ? "#B88D5C" : "#D8B58A",
+        }}
+      />
+      <View
+        style={{
+          position: "absolute",
+          top: 9,
+          left: 5,
+          width: 15,
+          height: 2,
+          backgroundColor: read ? "#B88D5C" : "#D8B58A",
+        }}
+      />
+      {!read && (
+        <View
+          style={{
+            position: "absolute",
+            right: -4,
+            bottom: -4,
+            width: 8,
+            height: 8,
+            backgroundColor: "#F7C948",
+            borderWidth: 2,
+            borderColor: "#9E451C",
+          }}
+        />
+      )}
+    </Pressable>
   );
 }
 export function Spark({ trigger }: { trigger: number }) {

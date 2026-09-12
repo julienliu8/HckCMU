@@ -2,10 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { View, Text, Pressable, TextInput } from "react-native";
 import { useRoom } from "../store/useRoom";
 import { useVillage } from "../store/useVillage";
-import { Gift } from "../store/gifting";
+import { Gift, MAX_GIFT_NOTE_LENGTH } from "../store/gifting";
 import { MAX_FRIENDS, Shape, palette } from "../store/model";
-import { PixelBouquet, PixelFlower } from "./PixelArt";
+import { PixelBouquet, PixelFlower, PixelNoteTag } from "./PixelArt";
 import { PixelButton, Label, Sheet } from "./PixelUI";
+
+const arrivalPlacements = [
+  { left: 6, top: 26 },
+  { left: 28, top: 14 },
+  { left: 50, top: 2 },
+];
 
 export function MultiplayerPanel() {
   const { gifts, error, pending, refresh, send } = useRoom();
@@ -26,6 +32,9 @@ export function MultiplayerPanel() {
   const [nameInput, setNameInput] = useState(profile.name);
   const [friendName, setFriendName] = useState("");
   const [friendCode, setFriendCode] = useState("");
+  const [note, setNote] = useState("");
+  const [selectedNote, setSelectedNote] = useState<Gift | null>(null);
+  const [readNoteIds, setReadNoteIds] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     let active = true;
@@ -54,12 +63,17 @@ export function MultiplayerPanel() {
   const friendLimitReached = contacts.length >= MAX_FRIENDS;
 
   const senders = [...new Set(received.map((g) => g.senderId))];
+  const openNote = (gift: Gift) => {
+    setReadNoteIds((ids) => ({ ...ids, [gift.id]: true }));
+    setSelectedNote(gift);
+  };
   const begin = (id?: string) => {
     const next = id || contacts[0]?.id;
     if (!next) return;
     setRecipient(next);
     setShape(draft.shape);
     setColor(draft.color);
+    setNote("");
     setAttempt(null);
     setReceipt("");
     setOpen(true);
@@ -218,35 +232,76 @@ export function MultiplayerPanel() {
           senders.map((senderId) => {
             const blooms = received.filter((g) => g.senderId === senderId).slice(-3);
             const latest = blooms[blooms.length - 1];
+            const latestNote = [...blooms].reverse().find((g) => g.note);
+            const latestNoteRead = latestNote ? readNoteIds[latestNote.id] : false;
             const senderName = latest.senderName || senderId;
             return (
               <View
                 key={senderId}
                 className="flex-row items-center gap-3 bg-[#F4D8B2] p-3"
               >
-                <PixelBouquet
-                  flowers={blooms}
-                  pot={latest.pot}
-                  spark={Date.parse(latest.createdAt)}
-                  width={112}
-                  height={130}
-                  flowerSize={60}
-                  potSize={100}
-                  potLeft={7}
-                  potTop={35}
-                  placements={[
-                    { left: 6, top: 26 },
-                    { left: 28, top: 14 },
-                    { left: 50, top: 2 },
-                  ]}
-                />
+                <View style={{ width: 112, height: 130 }}>
+                  <Pressable
+                    accessibilityRole={latestNote ? "button" : undefined}
+                    accessibilityLabel={
+                      latestNote ? `Open note from ${senderName}` : undefined
+                    }
+                    disabled={!latestNote}
+                    onPress={() => {
+                      if (latestNote) openNote(latestNote);
+                    }}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      bottom: 0,
+                      left: 0,
+                    }}
+                  >
+                    <PixelBouquet
+                      flowers={blooms}
+                      pot={latest.pot}
+                      spark={Date.parse(latest.createdAt)}
+                      width={112}
+                      height={130}
+                      flowerSize={60}
+                      potSize={100}
+                      potLeft={7}
+                      potTop={35}
+                      placements={arrivalPlacements}
+                    />
+                  </Pressable>
+                  {blooms.map((g, i) => {
+                    if (!g.note) return null;
+                    const place = arrivalPlacements[i] ?? arrivalPlacements.at(-1)!;
+                    return (
+                      <View
+                        key={`note-${g.id}`}
+                        style={{
+                          position: "absolute",
+                          left: place.left + 34,
+                          top: place.top + 34,
+                        }}
+                      >
+                        <PixelNoteTag
+                          read={readNoteIds[g.id]}
+                          onPress={() => openNote(g)}
+                        />
+                      </View>
+                    );
+                  })}
+                </View>
                 <View className="flex-1 gap-2">
                   <Text className="text-bark font-bold">From {senderName}</Text>
                   <Text className="text-xs text-bark leading-5">
                     {blooms.length} recent {blooms.length === 1 ? "flower" : "flowers"}.
                   </Text>
                   <Text className="font-pixel text-[9px] text-moss">
-                    A LITTLE BLOOM ARRIVED
+                    {latestNote
+                      ? latestNoteRead
+                        ? "NOTE READ"
+                        : "NEW NOTE TUCKED INSIDE"
+                      : "A LITTLE BLOOM ARRIVED"}
                   </Text>
                 </View>
               </View>
@@ -327,8 +382,29 @@ export function MultiplayerPanel() {
               />
             ))}
           </View>
+          <View className="gap-2">
+            <Label>TINY NOTE</Label>
+            <TextInput
+              accessibilityLabel="Flower note"
+              value={note}
+              onChangeText={(value) => {
+                setNote(value);
+                setAttempt(null);
+              }}
+              editable={!pending}
+              multiline
+              maxLength={MAX_GIFT_NOTE_LENGTH}
+              className="border-2 border-[#D8B58A] bg-[#FFF9EF] p-3 text-bark text-sm"
+              placeholder="A little hello..."
+              placeholderTextColor="#866648"
+              style={{ minHeight: 82, textAlignVertical: "top" }}
+            />
+            <Text className="font-pixel text-[8px] text-bark opacity-70">
+              {note.length}/{MAX_GIFT_NOTE_LENGTH}
+            </Text>
+          </View>
           <Text className="text-bark text-sm leading-6">
-            Sharing: this flower and your painted pot.{"\n"}Your journal text stays private.
+            Sharing: this flower, your painted pot, and this note.{"\n"}Your journal text stays private.
           </Text>
           <PixelButton
             label={
@@ -347,12 +423,14 @@ export function MultiplayerPanel() {
                 color,
                 pot: pot.map((row) => [...row]),
                 createdAt: new Date().toISOString(),
+                ...(note.trim() ? { note: note.trim() } : {}),
               };
               setAttempt(gift);
               if (await send(gift)) {
                 setReceipt(
                   `Delivered to ${contacts.find((c) => c.id === recipient)?.name || "your friend"}!`,
                 );
+                setNote("");
                 setOpen(false);
               }
             }}
@@ -362,6 +440,28 @@ export function MultiplayerPanel() {
               {error}
             </Text>
           )}
+        </Sheet>
+      )}
+      {selectedNote && (
+        <Sheet
+          title={`A note from ${selectedNote.senderName}`}
+          onClose={() => setSelectedNote(null)}
+        >
+          <View className="items-center">
+            <PixelFlower
+              shape={selectedNote.shape}
+              color={selectedNote.color}
+              size={74}
+            />
+            <View
+              className="border-2 border-[#9E451C] bg-[#FFF9EF] p-4 mt-2"
+              style={{ width: "100%" }}
+            >
+              <Text className="text-bark text-base leading-7">
+                {selectedNote.note}
+              </Text>
+            </View>
+          </View>
         </Sheet>
       )}
     </View>

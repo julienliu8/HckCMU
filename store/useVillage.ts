@@ -6,6 +6,7 @@ import {
   Shape,
   Feeling,
   Friend,
+  FriendFlower,
   Pixels,
   FriendContact,
   createHistory,
@@ -16,6 +17,17 @@ import {
   palette,
   MAX_FRIENDS,
 } from "./model";
+
+const demoFriendNotes = [
+  "Saw this color and thought of you.",
+  "A tiny hello from my windowsill.",
+  "No need to reply. Just wanted to leave a little bloom.",
+  "Hope your day has one soft corner in it.",
+  "This flower felt like good luck, so I sent it over.",
+];
+
+let demoFriendNoteIndex = 0;
+
 type VillageState = {
   history: Bloom[];
   friends: typeof mockFriends;
@@ -32,9 +44,13 @@ type VillageState = {
   removeContact: (id: string) => void;
   paint: (row: number, col: number, color: string | null) => void;
   resetPot: () => void;
-  trim: (id: string) => void;
+  prune: (id: string) => void;
   plant: () => boolean;
-  demoFriendBloom: (friendId?: string) => { friendId: string; friendName: string } | null;
+  demoFriendBloom: (friendId?: string) => {
+    friendId: string;
+    friendName: string;
+    note: string;
+  } | null;
 };
 export const useVillage = create<VillageState>()(
   persist(
@@ -79,10 +95,10 @@ export const useVillage = create<VillageState>()(
       paint: (r, c, color) =>
         set((s) => ({ pot: paintPixel(s.pot, r, c, color) })),
       resetPot: () => set({ pot: makePot() }),
-      trim: (id) =>
+      prune: (id) =>
         set((s) => ({
           history: s.history.map((b) =>
-            b.id === id && b.feeling === "heavy" ? { ...b, trimmed: true } : b,
+            b.id === id && b.feeling === "heavy" ? { ...b, pruned: true } : b,
           ),
         })),
       plant: () => {
@@ -91,7 +107,7 @@ export const useVillage = create<VillageState>()(
         set((s) => ({
           history: [
             ...s.history,
-            { ...s.draft, id: `bloom-${today}`, date: today, trimmed: false },
+            { ...s.draft, id: `bloom-${today}`, date: today, pruned: false },
           ],
           draft: { ...s.draft, journal: "" },
         }));
@@ -105,9 +121,13 @@ export const useVillage = create<VillageState>()(
           : Math.floor(Math.random() * friends.length);
         const friend = friends[index];
         if (!friend) return null;
-        const nextFlower = {
+        const note = demoFriendNotes[demoFriendNoteIndex % demoFriendNotes.length];
+        demoFriendNoteIndex++;
+        const nextFlower: FriendFlower = {
+          id: `demo-bloom-${Date.now()}-${demoFriendNoteIndex}`,
           shape: shapes[Math.floor(Math.random() * shapes.length)],
           color: palette[Math.floor(Math.random() * palette.length)],
+          note,
         };
         set((s) => ({
           friends: s.friends.map((item) =>
@@ -119,7 +139,7 @@ export const useVillage = create<VillageState>()(
               : item,
           ),
         }));
-        return { friendId: friend.id, friendName: friend.name };
+        return { friendId: friend.id, friendName: friend.name, note };
       },
     }),
     {

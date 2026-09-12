@@ -17,7 +17,7 @@ For reproducible dependencies, this project includes `pnpm-lock.yaml`: use `pnpm
 
 ## Demo
 
-- **Outside:** 14 preloaded flowers dated to the previous 14 local days. Bright flowers glow, heavy flowers have vines. Tap a flower to open its journal; Trim Weeds animates the vines away and preserves the entry.
+- **Outside:** 14 preloaded flowers dated to the previous 14 local days. Bright flowers glow, heavy flowers have vines. Tap a flower to open its journal; Prune Weeds animates the vines away and preserves the entry.
 - **Inside:** three mock friends and hand-painted pots. Each vase shows exactly three overlapping flowers, ordered oldest bottom-left to newest top-right. Tap the cottage door sign to step back outside.
 - **Create:** choose a flower shape, a circular color palette, and a feeling; write a private journal; paint a 20×20 pot by tapping or dragging. Eraser and Reset Pot are available. Plant once per local calendar day.
 - **Clock:** live device time updates every 15 seconds and on foregrounding. The sky transitions at dawn (06:00–08:00) and dusk (18:00–20:00). Reduced-motion preferences are respected by animations.
@@ -32,7 +32,7 @@ For reproducible dependencies, this project includes `pnpm-lock.yaml`: use `pnpm
 
 ## Local data and prototype limits
 
-Garden entries, trimmed plants, painted pot, and creator draft persist locally across reloads through AsyncStorage (browser local storage on web). Friends are mock data. There is no authentication, cloud synchronization, or real notification delivery. Local storage is not encrypted; use sample journal text for demos. The app does not infer anyone's mental health or change a past journal when trimming.
+Garden entries, pruned plants, painted pot, and creator draft persist locally across reloads through AsyncStorage (browser local storage on web). Friends are mock data. There is no authentication, cloud synchronization, or real notification delivery. Local storage is not encrypted; use sample journal text for demos. The app does not infer anyone's mental health or change a past journal when pruning.
 
 A new install seeds 14 earlier dates once. It does not invent journal entries for subsequent missed days. Stored calendar cells are chronological rather than aligned to weekday columns.
 
@@ -67,7 +67,7 @@ The server serves the web build and gift API on port 8787. The laptop must stay 
 
 ### A 60-second judging demo
 
-1. Show a heavy flower in Outside and trim its weeds while keeping its journal unchanged.
+1. Show a heavy flower in Outside and prune its weeds while keeping its journal unchanged.
 2. Open Inside in two browser windows.
 3. Copy each device's friend code and add each other as friends.
 4. Send a flower to your friend from one device.

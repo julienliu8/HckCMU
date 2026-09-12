@@ -15,7 +15,7 @@ export function OutsideScreen({
   onEnterHouse: () => void;
 }) {
   const history = useVillage((s) => s.history),
-    trim = useVillage((s) => s.trim);
+    prune = useVillage((s) => s.prune);
   const [selected, setSelected] = useState<string | null>(null);
   const bloom = history.find((b) => b.id === selected);
   const hasToday = history.some((b) => b.date === localDay());
@@ -61,7 +61,7 @@ export function OutsideScreen({
               <Pressable
                 key={b.id}
                 accessibilityRole="button"
-                accessibilityLabel={`${b.date}, ${b.feeling}${b.feeling === "heavy" && !b.trimmed ? ", weeds to trim" : ""}${b.trimmed ? ", trimmed" : ""}`}
+                accessibilityLabel={`${b.date}, ${b.feeling}${b.feeling === "heavy" && !b.pruned ? ", weeds to prune" : ""}${b.pruned ? ", pruned" : ""}`}
                 onPress={() => setSelected(b.id)}
                 style={({ pressed }) => ({
                   width: "14.285714%",
@@ -77,7 +77,7 @@ export function OutsideScreen({
                   shape={b.shape}
                   color={b.color}
                   size={42}
-                  weedy={b.feeling === "heavy" && !b.trimmed}
+                  weedy={b.feeling === "heavy" && !b.pruned}
                   glow={b.feeling === "bright"}
                 />
                 <Text
@@ -137,7 +137,7 @@ export function OutsideScreen({
               size={120}
               shape={bloom.shape}
               color={bloom.color}
-              weedy={bloom.feeling === "heavy" && !bloom.trimmed}
+              weedy={bloom.feeling === "heavy" && !bloom.pruned}
               glow={bloom.feeling === "bright"}
             />
             <Label>
@@ -152,9 +152,9 @@ export function OutsideScreen({
           </Text>
           {bloom.feeling === "heavy" && (
             <PixelButton
-              label={bloom.trimmed ? "TENDED WITH CARE ✓" : "TRIM WEEDS ✂"}
-              disabled={bloom.trimmed}
-              onPress={() => trim(bloom.id)}
+              label={bloom.pruned ? "PRUNED WITH CARE ✓" : "PRUNE WEEDS ✂"}
+              disabled={bloom.pruned}
+              onPress={() => prune(bloom.id)}
             />
           )}
         </Sheet>

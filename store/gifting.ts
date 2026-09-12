@@ -8,9 +8,11 @@ export type Gift = {
   color: string;
   pot: Pixels;
   createdAt: string;
+  note?: string;
 };
 const hex = /^#[0-9a-f]{6}$/i;
 const idPattern = /^[a-z0-9-]{3,32}$/;
+export const MAX_GIFT_NOTE_LENGTH = 160;
 /** Shared data is intentionally allowlisted. No journal or draft object can enter a gift. */
 export function validateGift(input: unknown): Gift {
   if (!input || typeof input !== "object" || Array.isArray(input))
@@ -25,9 +27,10 @@ export function validateGift(input: unknown): Gift {
     "color",
     "pot",
     "createdAt",
+    "note",
   ];
   if (Object.keys(g).some((k) => !keys.includes(k)))
-    throw new Error("Only flower appearance and pot pixels may be shared");
+    throw new Error("Only flower gifts and notes may be shared");
   if (typeof g.id !== "string" || !/^[a-zA-Z0-9-]{1,80}$/.test(g.id))
     throw new Error("Invalid gift ID");
   if (
@@ -62,6 +65,12 @@ export function validateGift(input: unknown): Gift {
     !Number.isFinite(Date.parse(g.createdAt))
   )
     throw new Error("Invalid date");
+  const note = typeof g.note === "string" ? g.note.trim() : "";
+  if (
+    g.note !== undefined &&
+    (typeof g.note !== "string" || note.length > MAX_GIFT_NOTE_LENGTH)
+  )
+    throw new Error("Invalid note");
   return {
     id: g.id,
     senderId: g.senderId as string,
@@ -71,5 +80,6 @@ export function validateGift(input: unknown): Gift {
     color: g.color,
     pot: g.pot as Pixels,
     createdAt: g.createdAt,
+    ...(note ? { note: note.slice(0, MAX_GIFT_NOTE_LENGTH) } : {}),
   };
 }
