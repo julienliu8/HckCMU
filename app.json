@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Bloom Village",
+    "slug": "bloom-village",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
