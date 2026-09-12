@@ -41,6 +41,10 @@ export const palette = [
   "#6B8E3B",
   "#4F9ED9",
   "#74BCA8",
+  "#F08BB4",
+  "#9B6BD3",
+  "#F5F0D8",
+  "#B85C38",
 ];
 export const localDay = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;

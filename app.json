@@ -4,9 +4,11 @@
     "slug": "pruned",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/logo.png"
     }
   }
 }

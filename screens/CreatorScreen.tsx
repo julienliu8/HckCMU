@@ -94,7 +94,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
           <Label>02 / FIND YOUR COLOR</Label>
           <View className="self-center" style={{ width: 220, height: 220 }}>
             {palette.map((color, i) => {
-              const angle = (i * Math.PI) / 4 - Math.PI / 2;
+              const angle = (i * 2 * Math.PI) / palette.length - Math.PI / 2;
               return (
                 <Pressable
                   key={color}

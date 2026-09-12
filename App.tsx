@@ -1,6 +1,6 @@
 import "./global.css";
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { Image, Platform, View, Text, Pressable } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import Animated, {
@@ -18,6 +18,7 @@ import { CreatorScreen } from "./screens/CreatorScreen";
 type Place = "outside" | "inside" | "creator";
 export default function App() {
   const [place, setPlace] = useState<Place>("outside");
+  const [entered, setEntered] = useState(false);
   const { now, night } = useVillageClock();
   const hydrated = useVillage((s) => s.hydrated),
     storageError = useVillage((s) => s.storageError);
@@ -38,11 +39,99 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <StatusBar style={night > 0.5 ? "light" : "dark"} />
-      <Animated.View style={[{ flex: 1 }, bg]}>
+      <Animated.View
+        style={[
+          { flex: 1, backgroundColor: "#050505" },
+          Platform.OS === "web" ? null : bg,
+        ]}
+      >
         <SafeAreaView
           className="flex-1"
           edges={["top", "bottom", "left", "right"]}
         >
+          {!entered ? (
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Enter Pruned"
+              onPress={() => setEntered(true)}
+              className="flex-1 w-full self-center overflow-hidden"
+              style={{
+                maxWidth: 520,
+                backgroundColor: night > 0.5 ? "#394354" : "#D7F0E8",
+              }}
+            >
+              <View
+                pointerEvents="none"
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: 210,
+                  backgroundColor: night > 0.5 ? "#4F663C" : "#95BE61",
+                  borderTopWidth: 6,
+                  borderColor: night > 0.5 ? "#283D2B" : "#6B8E3B",
+                }}
+              />
+              <View
+                pointerEvents="none"
+                style={{
+                  position: "absolute",
+                  left: 60,
+                  right: 60,
+                  bottom: 0,
+                  height: 150,
+                  backgroundColor: "#DFA66E",
+                  borderLeftWidth: 4,
+                  borderRightWidth: 4,
+                  borderColor: "#9E451C",
+                }}
+              />
+              {[42, 92, 148, 340, 396, 452].map((left, i) => (
+                <View
+                  key={left}
+                  pointerEvents="none"
+                  style={{
+                    position: "absolute",
+                    left,
+                    bottom: 94 + (i % 2) * 18,
+                    width: 16,
+                    height: 16,
+                    backgroundColor: i % 3 === 0 ? "#F7C948" : "#F5822A",
+                    borderWidth: 3,
+                    borderColor: "#4C744A",
+                  }}
+                />
+              ))}
+              <View className="flex-1 items-center justify-center px-8">
+                <View
+                  className="items-center border-2 border-b-8 border-bark px-8 py-7"
+                  style={{
+                    backgroundColor: night > 0.5 ? "#FFF2DCCC" : "#FFF8EADD",
+                  }}
+                >
+                  <Image
+                    source={require("./assets/logo.png")}
+                    accessibilityLabel="Pruned logo"
+                    resizeMode="contain"
+                    style={{ width: 104, height: 104 }}
+                  />
+                  <Text className="font-pixel text-3xl font-bold text-bark mt-4">
+                    Pruned
+                  </Text>
+                  <Text className="font-pixel text-[9px] text-moss mt-3 tracking-widest text-center">
+                    A SOFTER PLACE TO LAND
+                  </Text>
+                </View>
+                <Text
+                  className="font-pixel text-[10px] mt-8 text-center"
+                  style={{ color: night > 0.5 ? "#FFF8EA" : "#662305" }}
+                >
+                  TAP ANYWHERE TO ENTER
+                </Text>
+              </View>
+            </Pressable>
+          ) : (
           <View
             className="flex-1 w-full self-center"
             style={{
@@ -52,14 +141,27 @@ export default function App() {
           >
             <View className="px-5 pt-4 pb-3 border-b-2 border-[#D8B58A]">
               <View className="flex-row justify-between items-center gap-2">
-                <View>
-                  <Text className="font-pixel text-lg font-bold text-bark">
-                    Pruned<Text className="text-moss"> ✿</Text>
-                  </Text>
-                  <Text className="font-pixel text-[8px] text-bark mt-1 tracking-widest">
-                    A SOFTER PLACE TO LAND
-                  </Text>
-                </View>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Return to garden"
+                  onPress={() => setPlace("outside")}
+                  className="flex-row items-center gap-2 active:opacity-80"
+                >
+                  <Image
+                    source={require("./assets/logo.png")}
+                    accessibilityLabel="Pruned logo"
+                    resizeMode="contain"
+                    style={{ width: 32, height: 32 }}
+                  />
+                  <View>
+                    <Text className="font-pixel text-lg font-bold text-bark">
+                      Pruned
+                    </Text>
+                    <Text className="font-pixel text-[8px] text-bark mt-1 tracking-widest">
+                      A SOFTER PLACE TO LAND
+                    </Text>
+                  </View>
+                </Pressable>
                 <Text className="font-pixel text-[9px] text-bark">
                   {night > 0.5 ? "☾" : "☀"}{" "}
                   {now.toLocaleTimeString([], {
@@ -143,6 +245,7 @@ export default function App() {
               </>
             )}
           </View>
+          )}
         </SafeAreaView>
       </Animated.View>
     </SafeAreaProvider>
