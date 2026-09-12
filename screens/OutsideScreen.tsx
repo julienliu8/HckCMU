@@ -8,14 +8,14 @@ import { localDay } from "../store/model";
 export function OutsideScreen({
   night,
   onCreate,
-  onShare,
+  onEnterHouse,
 }: {
   night: number;
   onCreate: () => void;
-  onShare: () => void;
+  onEnterHouse: () => void;
 }) {
   const history = useVillage((s) => s.history),
-    trim = useVillage((s) => s.trim);
+    prune = useVillage((s) => s.prune);
   const [selected, setSelected] = useState<string | null>(null);
   const bloom = history.find((b) => b.id === selected);
   const hasToday = history.some((b) => b.date === localDay());
@@ -35,7 +35,7 @@ export function OutsideScreen({
             here.
           </Text>
         </View>
-        <Landscape night={night} />
+        <Landscape night={night} onEnterHouse={onEnterHouse} />
         <View
           className="mx-4 p-4 border-2 border-b-8"
           style={{ backgroundColor: "#DFA66E", borderColor: "#9E451C" }}
@@ -61,7 +61,7 @@ export function OutsideScreen({
               <Pressable
                 key={b.id}
                 accessibilityRole="button"
-                accessibilityLabel={`${b.date}, ${b.feeling}${b.feeling === "heavy" && !b.trimmed ? ", weeds to trim" : ""}${b.trimmed ? ", trimmed" : ""}`}
+                accessibilityLabel={`${b.date}, ${b.feeling}${b.feeling === "heavy" && !b.pruned ? ", weeds to prune" : ""}${b.pruned ? ", pruned" : ""}`}
                 onPress={() => setSelected(b.id)}
                 style={({ pressed }) => ({
                   width: "14.285714%",
@@ -77,7 +77,7 @@ export function OutsideScreen({
                   shape={b.shape}
                   color={b.color}
                   size={42}
-                  weedy={b.feeling === "heavy" && !b.trimmed}
+                  weedy={b.feeling === "heavy" && !b.pruned}
                   glow={b.feeling === "bright"}
                 />
                 <Text
@@ -119,8 +119,8 @@ export function OutsideScreen({
           />
           <PixelButton
             light
-            label="SEND A FLOWER TO A FRIEND →"
-            onPress={onShare}
+            label="VISIT THE COTTAGE →"
+            onPress={onEnterHouse}
           />
         </View>
         <Text className="text-center font-pixel text-[9px] text-bark">
@@ -137,7 +137,7 @@ export function OutsideScreen({
               size={120}
               shape={bloom.shape}
               color={bloom.color}
-              weedy={bloom.feeling === "heavy" && !bloom.trimmed}
+              weedy={bloom.feeling === "heavy" && !bloom.pruned}
               glow={bloom.feeling === "bright"}
             />
             <Label>
@@ -152,9 +152,9 @@ export function OutsideScreen({
           </Text>
           {bloom.feeling === "heavy" && (
             <PixelButton
-              label={bloom.trimmed ? "TENDED WITH CARE ✓" : "TRIM WEEDS ✂"}
-              disabled={bloom.trimmed}
-              onPress={() => trim(bloom.id)}
+              label={bloom.pruned ? "PRUNED WITH CARE ✓" : "PRUNE WEEDS ✂"}
+              disabled={bloom.pruned}
+              onPress={() => prune(bloom.id)}
             />
           )}
         </Sheet>

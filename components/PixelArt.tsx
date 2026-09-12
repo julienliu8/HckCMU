@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import Svg, { Rect } from "react-native-svg";
 import Animated, {
   useAnimatedStyle,
@@ -10,6 +10,19 @@ import Animated, {
   ReduceMotion,
 } from "react-native-reanimated";
 import { Shape, Pixels } from "../store/model";
+
+type BouquetFlower = {
+  id?: string;
+  shape: Shape;
+  color: string;
+  note?: string;
+};
+
+const defaultBouquetPlacements = [
+  { left: 10, top: 50 },
+  { left: 30, top: 31 },
+  { left: 51, top: 12 },
+];
 const patterns: Record<Shape, string[]> = {
   daisy: [
     "..PPP..",
@@ -37,6 +50,33 @@ const patterns: Record<Shape, string[]> = {
     "..PPP..",
     ".P.P.P.",
     "...P...",
+  ],
+  rose: [
+    "..PPP..",
+    ".PPCP..",
+    "PPCCPP.",
+    ".PCPPP.",
+    "..PP...",
+    "...P...",
+    ".......",
+  ],
+  sunflower: [
+    ".P.P.P.",
+    "PPPCPPP",
+    ".PCCCP.",
+    "PPCCCPP",
+    ".PCCCP.",
+    "PPPCPPP",
+    ".P.P.P.",
+  ],
+  lavender: [
+    "...P...",
+    "..PP...",
+    "...PP..",
+    "..PP...",
+    "...PP..",
+    "...P...",
+    ".......",
   ],
 };
 export function PixelFlower({
@@ -170,6 +210,139 @@ export function PixelPot({
         ),
       )}
     </Svg>
+  );
+}
+export function PixelBouquet({
+  flowers,
+  pot,
+  spark = 0,
+  width = 120,
+  height = 155,
+  flowerSize = 65,
+  potSize = 100,
+  potLeft = 10,
+  potTop = 58,
+  placements = defaultBouquetPlacements,
+}: {
+  flowers: BouquetFlower[];
+  pot: Pixels;
+  spark?: number;
+  width?: number;
+  height?: number;
+  flowerSize?: number;
+  potSize?: number;
+  potLeft?: number;
+  potTop?: number;
+  placements?: { left: number; top: number }[];
+}) {
+  const potRimY = potTop + potSize * 0.35;
+  const potCenterX = potLeft + potSize * 0.5;
+  return (
+    <View style={{ width, height }}>
+      {flowers.map((flower, i) => {
+        const place = placements[i] ?? placements[placements.length - 1];
+        const stemX = place.left + flowerSize * 0.5;
+        const stemBottom = place.top + flowerSize * 0.94;
+        const stemWidth = Math.max(4, Math.round(flowerSize * 0.08));
+        const stemEndY = potRimY + 8;
+        const stemTop = Math.min(stemBottom - 2, stemEndY);
+        return (
+          <View
+            key={`stem-${flower.id ?? i}`}
+            style={{
+              position: "absolute",
+              left: stemX - stemWidth / 2,
+              top: stemTop,
+              width: stemWidth,
+              height: stemEndY - stemTop,
+              backgroundColor: "#4C744A",
+              transform: [
+                { translateX: (potCenterX - stemX) * 0.16 },
+                { rotate: `${(potCenterX - stemX) * 0.08}deg` },
+              ],
+            }}
+          />
+        );
+      })}
+      {flowers.map((flower, i) => {
+        const place = placements[i] ?? placements[placements.length - 1];
+        return (
+          <View
+            key={flower.id ?? `${flower.shape}-${flower.color}-${i}`}
+            style={{ position: "absolute", left: place.left, top: place.top }}
+          >
+            <PixelFlower
+              shape={flower.shape}
+              color={flower.color}
+              size={flowerSize}
+            />
+          </View>
+        );
+      })}
+      <View style={{ position: "absolute", left: potLeft, top: potTop }}>
+        <PixelPot pixels={pot} size={potSize} />
+      </View>
+      <Spark trigger={spark} />
+    </View>
+  );
+}
+export function PixelNoteTag({
+  onPress,
+  read = false,
+}: {
+  onPress: () => void;
+  read?: boolean;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={read ? "Open read note" : "Open unread note"}
+      onPress={onPress}
+      className="items-center justify-center active:opacity-80"
+      style={{
+        width: 25,
+        height: 20,
+        backgroundColor: read ? "#EAD3AF" : "#FFF4E3",
+        borderWidth: 2,
+        borderColor: read ? "#B88D5C" : "#9E451C",
+        opacity: read ? 0.72 : 1,
+      }}
+    >
+      <View
+        style={{
+          position: "absolute",
+          top: 4,
+          left: 5,
+          width: 11,
+          height: 2,
+          backgroundColor: read ? "#B88D5C" : "#D8B58A",
+        }}
+      />
+      <View
+        style={{
+          position: "absolute",
+          top: 9,
+          left: 5,
+          width: 15,
+          height: 2,
+          backgroundColor: read ? "#B88D5C" : "#D8B58A",
+        }}
+      />
+      {!read && (
+        <View
+          style={{
+            position: "absolute",
+            right: -4,
+            bottom: -4,
+            width: 8,
+            height: 8,
+            backgroundColor: "#F7C948",
+            borderWidth: 2,
+            borderColor: "#9E451C",
+          }}
+        />
+      )}
+    </Pressable>
   );
 }
 export function Spark({ trigger }: { trigger: number }) {

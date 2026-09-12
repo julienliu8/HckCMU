@@ -1,20 +1,26 @@
 import type { Pixels, Shape } from "./model";
-export const demoPeople = [
-  { id: "you", name: "Alex" },
-  { id: "maya", name: "Maya" },
-  { id: "ian", name: "Ian" },
-  { id: "leo", name: "Leo" },
-];
 export type Gift = {
   id: string;
-  sender: string;
-  recipient: string;
+  senderId: string;
+  senderName: string;
+  recipientId: string;
   shape: Shape;
   color: string;
   pot: Pixels;
   createdAt: string;
+  note?: string;
 };
 const hex = /^#[0-9a-f]{6}$/i;
+const idPattern = /^[a-z0-9-]{3,32}$/;
+const giftShapes: readonly Shape[] = [
+  "daisy",
+  "tulip",
+  "star",
+  "rose",
+  "sunflower",
+  "lavender",
+];
+export const MAX_GIFT_NOTE_LENGTH = 160;
 /** Shared data is intentionally allowlisted. No journal or draft object can enter a gift. */
 export function validateGift(input: unknown): Gift {
   if (!input || typeof input !== "object" || Array.isArray(input))
@@ -22,25 +28,31 @@ export function validateGift(input: unknown): Gift {
   const g = input as Record<string, unknown>;
   const keys = [
     "id",
-    "sender",
-    "recipient",
+    "senderId",
+    "senderName",
+    "recipientId",
     "shape",
     "color",
     "pot",
     "createdAt",
+    "note",
   ];
   if (Object.keys(g).some((k) => !keys.includes(k)))
-    throw new Error("Only flower appearance and pot pixels may be shared");
+    throw new Error("Only flower gifts and notes may be shared");
   if (typeof g.id !== "string" || !/^[a-zA-Z0-9-]{1,80}$/.test(g.id))
     throw new Error("Invalid gift ID");
   if (
-    !demoPeople.some((p) => p.id === g.sender) ||
-    !demoPeople.some((p) => p.id === g.recipient) ||
-    g.sender === g.recipient
+    typeof g.senderId !== "string" ||
+    typeof g.recipientId !== "string" ||
+    !idPattern.test(g.senderId) ||
+    !idPattern.test(g.recipientId) ||
+    g.senderId === g.recipientId
   )
-    throw new Error("Choose another demo person");
+    throw new Error("Choose another friend code");
+  if (typeof g.senderName !== "string" || !g.senderName.trim())
+    throw new Error("Sender name is required");
   if (
-    !["daisy", "tulip", "star"].includes(String(g.shape)) ||
+    !giftShapes.includes(g.shape as Shape) ||
     typeof g.color !== "string" ||
     !hex.test(g.color)
   )
@@ -61,16 +73,21 @@ export function validateGift(input: unknown): Gift {
     !Number.isFinite(Date.parse(g.createdAt))
   )
     throw new Error("Invalid date");
+  const note = typeof g.note === "string" ? g.note.trim() : "";
+  if (
+    g.note !== undefined &&
+    (typeof g.note !== "string" || note.length > MAX_GIFT_NOTE_LENGTH)
+  )
+    throw new Error("Invalid note");
   return {
     id: g.id,
-    sender: g.sender as string,
-    recipient: g.recipient as string,
+    senderId: g.senderId as string,
+    senderName: g.senderName.trim().slice(0, 32),
+    recipientId: g.recipientId as string,
     shape: g.shape as Shape,
     color: g.color,
     pot: g.pot as Pixels,
     createdAt: g.createdAt,
+    ...(note ? { note: note.slice(0, MAX_GIFT_NOTE_LENGTH) } : {}),
   };
 }
-export const personName = (id: string) =>
-  demoPeople.find((p) => p.id === id)?.name ?? id;
-

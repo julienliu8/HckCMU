@@ -54,7 +54,7 @@ export default function App() {
               <View className="flex-row justify-between items-center gap-2">
                 <View>
                   <Text className="font-pixel text-lg font-bold text-bark">
-                    bloom village<Text className="text-moss"> ✿</Text>
+                    Pruned<Text className="text-moss"> ✿</Text>
                   </Text>
                   <Text className="font-pixel text-[8px] text-bark mt-1 tracking-widest">
                     A SOFTER PLACE TO LAND
@@ -82,10 +82,13 @@ export default function App() {
                     <OutsideScreen
                       night={night}
                       onCreate={() => setPlace("creator")}
-                      onShare={() => setPlace("inside")}
+                      onEnterHouse={() => setPlace("inside")}
                     />
                   ) : place === "inside" ? (
-                    <InsideScreen night={night} />
+                    <InsideScreen
+                      night={night}
+                      onExitHouse={() => setPlace("outside")}
+                    />
                   ) : (
                     <CreatorScreen onDone={() => setPlace("outside")} />
                   )}
@@ -102,8 +105,6 @@ export default function App() {
                 <View className="flex-row gap-2 p-3 border-t-2 border-[#D8B58A] bg-cream">
                   {(
                     [
-                      { id: "outside", label: "OUTSIDE", icon: "✿" },
-                      { id: "inside", label: "INSIDE", icon: "⌂" },
                       { id: "creator", label: "CREATE", icon: "+" },
                     ] as const
                   ).map((item) => (

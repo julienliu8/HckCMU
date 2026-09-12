@@ -98,13 +98,13 @@ if (
 ) {
   const port = Number(process.env.DEMO_PORT || 8787);
   createDemoServer().listen(port, "0.0.0.0", () => {
-    console.log(`Bloom Village demo: http://localhost:${port}`);
+    console.log(`Pruned demo: http://localhost:${port}`);
     for (const entries of Object.values(networkInterfaces()))
       for (const item of entries || [])
         if (item.family === "IPv4" && !item.internal)
           console.log(`Same Wi-Fi: http://${item.address}:${port}`);
     console.log(
-      "Use Live room with the same room code and different identities. Demo identities are not authenticated. Room data resets when this server stops.",
+      "Use Inside → Flower Post and exchange friend codes. Demo friend codes are not authenticated. Server data resets when this server stops.",
     );
   });
 }

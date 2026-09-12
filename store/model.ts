@@ -1,4 +1,12 @@
-export type Shape = "daisy" | "tulip" | "star";
+export const flowerShapes = [
+  "daisy",
+  "tulip",
+  "star",
+  "rose",
+  "sunflower",
+  "lavender",
+] as const;
+export type Shape = (typeof flowerShapes)[number];
 export type Feeling = "bright" | "quiet" | "heavy";
 export type Pixels = (string | null)[][];
 export type Bloom = {
@@ -8,19 +16,24 @@ export type Bloom = {
   color: string;
   feeling: Feeling;
   journal: string;
-  trimmed: boolean;
+  pruned: boolean;
+};
+export type FriendFlower = Pick<Bloom, "shape" | "color"> & {
+  id?: string;
+  note?: string;
 };
 export type Friend = {
   id: string;
   name: string;
   note: string;
   pot: Pixels;
-  flowers: [
-    Pick<Bloom, "shape" | "color">,
-    Pick<Bloom, "shape" | "color">,
-    Pick<Bloom, "shape" | "color">,
-  ];
+  flowers: [FriendFlower, FriendFlower, FriendFlower];
 };
+export type FriendContact = {
+  id: string;
+  name: string;
+};
+export const MAX_FRIENDS = 8;
 export const palette = [
   "#D64545",
   "#F5822A",
@@ -80,7 +93,7 @@ export function createHistory(now = new Date()): Bloom[] {
     return {
       id: `seed-${i}`,
       date: localDay(d),
-      shape: (["daisy", "tulip", "star"] as Shape[])[i % 3],
+      shape: flowerShapes[i % flowerShapes.length],
       color: palette[i % palette.length],
       feeling: (
         [
@@ -94,7 +107,7 @@ export function createHistory(now = new Date()): Bloom[] {
         ] as Feeling[]
       )[i % 7],
       journal: notes[i % 7],
-      trimmed: false,
+      pruned: false,
     };
   });
 }
