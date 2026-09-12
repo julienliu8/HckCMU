@@ -6,6 +6,7 @@ import {
   Shape,
   Feeling,
   Pixels,
+  FriendContact,
   createHistory,
   makePot,
   mockFriends,
@@ -16,12 +17,17 @@ import {
 type VillageState = {
   history: Bloom[];
   friends: typeof mockFriends;
+  profile: FriendContact;
+  contacts: FriendContact[];
   pot: Pixels;
   draft: { shape: Shape; color: string; feeling: Feeling; journal: string };
   hydrated: boolean;
   storageError: boolean;
   setHydrated: (error?: boolean) => void;
   setDraft: (patch: Partial<VillageState["draft"]>) => void;
+  setProfileName: (name: string) => void;
+  addContact: (contact: FriendContact) => boolean;
+  removeContact: (id: string) => void;
   paint: (row: number, col: number, color: string | null) => void;
   resetPot: () => void;
   trim: (id: string) => void;
@@ -32,6 +38,14 @@ export const useVillage = create<VillageState>()(
     (set, get) => ({
       history: createHistory(),
       friends: mockFriends,
+      profile: {
+        id: `cottage-${Math.random().toString(36).slice(2, 8)}`,
+        name: "My Cottage",
+      },
+      contacts: [
+        { id: "maya-cottage", name: "Maya" },
+        { id: "ian-cottage", name: "Ian" },
+      ],
       pot: makePot(),
       draft: {
         shape: "daisy",
@@ -44,6 +58,20 @@ export const useVillage = create<VillageState>()(
       setHydrated: (error = false) =>
         set({ hydrated: true, storageError: error }),
       setDraft: (patch) => set((s) => ({ draft: { ...s.draft, ...patch } })),
+      setProfileName: (name) =>
+        set((s) => ({ profile: { ...s.profile, name: name.trim() || "My Cottage" } })),
+      addContact: (contact) => {
+        const id = contact.id.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-");
+        const name = contact.name.trim();
+        if (!id || !name || id === get().profile.id) return false;
+        if (get().contacts.some((c) => c.id === id)) return false;
+        set((s) => ({
+          contacts: [...s.contacts, { id, name: name.slice(0, 24) }],
+        }));
+        return true;
+      },
+      removeContact: (id) =>
+        set((s) => ({ contacts: s.contacts.filter((c) => c.id !== id) })),
       paint: (r, c, color) =>
         set((s) => ({ pot: paintPixel(s.pot, r, c, color) })),
       resetPot: () => set({ pot: makePot() }),
@@ -69,7 +97,13 @@ export const useVillage = create<VillageState>()(
     {
       name: "bloom-village-v1",
       storage: createJSONStorage(() => AsyncStorage),
-      partialize: (s) => ({ history: s.history, pot: s.pot, draft: s.draft }),
+      partialize: (s) => ({
+        history: s.history,
+        pot: s.pot,
+        draft: s.draft,
+        profile: s.profile,
+        contacts: s.contacts,
+      }),
       onRehydrateStorage: () => (state, error) => {
         if (state) state.setHydrated(!!error);
         else useVillage.setState({ hydrated: true, storageError: true });

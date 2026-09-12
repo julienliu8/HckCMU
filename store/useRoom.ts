@@ -7,17 +7,13 @@ const defaultApi =
     ? `http://${window.location.hostname}:8787`
     : "http://localhost:8787");
 type RoomState = {
-  person: string;
-  mode: "local" | "live";
   api: string;
   room: string;
   gifts: Gift[];
-  localGifts: Gift[];
   error: string;
   connected: boolean;
   pending: boolean;
-  setPerson: (id: string) => void;
-  configure: (patch: Partial<Pick<RoomState, "mode" | "api" | "room">>) => void;
+  setApi: (api: string) => void;
   refresh: () => Promise<void>;
   send: (gift: Gift) => Promise<boolean>;
 };
@@ -40,28 +36,22 @@ async function request(api: string, path: string, body?: Gift) {
   }
 }
 export const useRoom = create<RoomState>((set, get) => ({
-  person: "you",
-  mode: "local",
   api: defaultApi,
-  room: "hackathon",
+  room: "bloom-village",
   gifts: [],
-  localGifts: [],
   error: "",
   connected: false,
   pending: false,
-  setPerson: (person) => set({ person }),
-  configure: (patch) => {
+  setApi: (api) => {
     generation++;
     set({
-      ...patch,
+      api: api.trim(),
       error: "",
       connected: false,
-      gifts: patch.mode === "local" ? get().localGifts : [],
     });
   },
   refresh: async () => {
-    const { mode, api, room } = get();
-    if (mode !== "live") return;
+    const { api, room } = get();
     const ticket = generation;
     try {
       const data = await request(api, `/api/rooms/${encodeURIComponent(room)}`);
@@ -76,33 +66,19 @@ export const useRoom = create<RoomState>((set, get) => ({
         set({
           connected: false,
           error:
-            "Cannot reach the live room. Start the demo server and check its address, or use This device.",
+            "Cannot reach the flower post. Start the demo server and check the server address.",
         });
     }
   },
   send: async (input) => {
     if (get().pending) return false;
     const gift = validateGift(input);
-    const { mode, api, room } = get();
+    const { api, room } = get();
     const ticket = generation;
     set({ pending: true, error: "" });
     try {
-      if (mode === "local") {
-        set((s) => {
-          const next = [
-            ...s.localGifts.filter((g) => g.id !== gift.id),
-            gift,
-          ].slice(-100);
-          return { localGifts: next, gifts: next };
-        });
-      } else {
-        await request(
-          api,
-          `/api/rooms/${encodeURIComponent(room)}/gifts`,
-          gift,
-        );
-        if (ticket === generation) await get().refresh();
-      }
+      await request(api, `/api/rooms/${encodeURIComponent(room)}/gifts`, gift);
+      if (ticket === generation) await get().refresh();
       return true;
     } catch {
       if (ticket === generation)

@@ -1,20 +1,16 @@
 import type { Pixels, Shape } from "./model";
-export const demoPeople = [
-  { id: "you", name: "Alex" },
-  { id: "maya", name: "Maya" },
-  { id: "ian", name: "Ian" },
-  { id: "leo", name: "Leo" },
-];
 export type Gift = {
   id: string;
-  sender: string;
-  recipient: string;
+  senderId: string;
+  senderName: string;
+  recipientId: string;
   shape: Shape;
   color: string;
   pot: Pixels;
   createdAt: string;
 };
 const hex = /^#[0-9a-f]{6}$/i;
+const idPattern = /^[a-z0-9-]{3,32}$/;
 /** Shared data is intentionally allowlisted. No journal or draft object can enter a gift. */
 export function validateGift(input: unknown): Gift {
   if (!input || typeof input !== "object" || Array.isArray(input))
@@ -22,8 +18,9 @@ export function validateGift(input: unknown): Gift {
   const g = input as Record<string, unknown>;
   const keys = [
     "id",
-    "sender",
-    "recipient",
+    "senderId",
+    "senderName",
+    "recipientId",
     "shape",
     "color",
     "pot",
@@ -34,11 +31,15 @@ export function validateGift(input: unknown): Gift {
   if (typeof g.id !== "string" || !/^[a-zA-Z0-9-]{1,80}$/.test(g.id))
     throw new Error("Invalid gift ID");
   if (
-    !demoPeople.some((p) => p.id === g.sender) ||
-    !demoPeople.some((p) => p.id === g.recipient) ||
-    g.sender === g.recipient
+    typeof g.senderId !== "string" ||
+    typeof g.recipientId !== "string" ||
+    !idPattern.test(g.senderId) ||
+    !idPattern.test(g.recipientId) ||
+    g.senderId === g.recipientId
   )
-    throw new Error("Choose another demo person");
+    throw new Error("Choose another friend code");
+  if (typeof g.senderName !== "string" || !g.senderName.trim())
+    throw new Error("Sender name is required");
   if (
     !["daisy", "tulip", "star"].includes(String(g.shape)) ||
     typeof g.color !== "string" ||
@@ -63,14 +64,12 @@ export function validateGift(input: unknown): Gift {
     throw new Error("Invalid date");
   return {
     id: g.id,
-    sender: g.sender as string,
-    recipient: g.recipient as string,
+    senderId: g.senderId as string,
+    senderName: g.senderName.trim().slice(0, 32),
+    recipientId: g.recipientId as string,
     shape: g.shape as Shape,
     color: g.color,
     pot: g.pot as Pixels,
     createdAt: g.createdAt,
   };
 }
-export const personName = (id: string) =>
-  demoPeople.find((p) => p.id === id)?.name ?? id;
-

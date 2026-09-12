@@ -8,11 +8,11 @@ import { localDay } from "../store/model";
 export function OutsideScreen({
   night,
   onCreate,
-  onShare,
+  onEnterHouse,
 }: {
   night: number;
   onCreate: () => void;
-  onShare: () => void;
+  onEnterHouse: () => void;
 }) {
   const history = useVillage((s) => s.history),
     trim = useVillage((s) => s.trim);
@@ -35,7 +35,7 @@ export function OutsideScreen({
             here.
           </Text>
         </View>
-        <Landscape night={night} />
+        <Landscape night={night} onEnterHouse={onEnterHouse} />
         <View
           className="mx-4 p-4 border-2 border-b-8"
           style={{ backgroundColor: "#DFA66E", borderColor: "#9E451C" }}
@@ -119,8 +119,8 @@ export function OutsideScreen({
           />
           <PixelButton
             light
-            label="SEND A FLOWER TO A FRIEND →"
-            onPress={onShare}
+            label="VISIT THE COTTAGE →"
+            onPress={onEnterHouse}
           />
         </View>
         <Text className="text-center font-pixel text-[9px] text-bark">

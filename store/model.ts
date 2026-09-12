@@ -21,6 +21,10 @@ export type Friend = {
     Pick<Bloom, "shape" | "color">,
   ];
 };
+export type FriendContact = {
+  id: string;
+  name: string;
+};
 export const palette = [
   "#D64545",
   "#F5822A",

@@ -104,7 +104,7 @@ if (
         if (item.family === "IPv4" && !item.internal)
           console.log(`Same Wi-Fi: http://${item.address}:${port}`);
     console.log(
-      "Use Live room with the same room code and different identities. Demo identities are not authenticated. Room data resets when this server stops.",
+      "Use Inside → Flower Post and exchange friend codes. Demo friend codes are not authenticated. Server data resets when this server stops.",
     );
   });
 }

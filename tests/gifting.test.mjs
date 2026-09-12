@@ -5,8 +5,9 @@ import { makePot } from "../store/model.ts";
 import { validateGift } from "../store/gifting.ts";
 const gift = {
   id: "test-gift",
-  sender: "you",
-  recipient: "maya",
+  senderId: "alex-cottage",
+  senderName: "Alex",
+  recipientId: "maya-cottage",
   shape: "star",
   color: "#AABBCC",
   pot: makePot(),
@@ -15,7 +16,7 @@ const gift = {
 test("shared payload rejects journals and invalid pixels", () => {
   assert.throws(() => validateGift({ ...gift, journal: "private words" }));
   assert.throws(() => validateGift({ ...gift, pot: [[null]] }));
-  assert.throws(() => validateGift({ ...gift, recipient: "you" }));
+  assert.throws(() => validateGift({ ...gift, recipientId: "alex-cottage" }));
   assert.deepEqual(validateGift(gift), gift);
 });
 test("live server delivers across clients, isolates rooms, and deduplicates retries", async () => {
@@ -33,7 +34,7 @@ test("live server delivers across clients, isolates rooms, and deduplicates retr
     assert.equal((await send(gift)).status, 200);
     const state = await (await fetch(base + "/api/rooms/test")).json();
     assert.equal(state.gifts.length, 1);
-    assert.equal(state.gifts[0].recipient, "maya");
+    assert.equal(state.gifts[0].recipientId, "maya-cottage");
     assert.deepEqual(
       (await (await fetch(base + "/api/rooms/other")).json()).gifts,
       [],

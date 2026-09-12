@@ -82,10 +82,13 @@ export default function App() {
                     <OutsideScreen
                       night={night}
                       onCreate={() => setPlace("creator")}
-                      onShare={() => setPlace("inside")}
+                      onEnterHouse={() => setPlace("inside")}
                     />
                   ) : place === "inside" ? (
-                    <InsideScreen night={night} />
+                    <InsideScreen
+                      night={night}
+                      onExitHouse={() => setPlace("outside")}
+                    />
                   ) : (
                     <CreatorScreen onDone={() => setPlace("outside")} />
                   )}
@@ -102,8 +105,6 @@ export default function App() {
                 <View className="flex-row gap-2 p-3 border-t-2 border-[#D8B58A] bg-cream">
                   {(
                     [
-                      { id: "outside", label: "OUTSIDE", icon: "✿" },
-                      { id: "inside", label: "INSIDE", icon: "⌂" },
                       { id: "creator", label: "CREATE", icon: "+" },
                     ] as const
                   ).map((item) => (

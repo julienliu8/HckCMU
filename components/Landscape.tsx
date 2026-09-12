@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Svg, { Rect, Path } from "react-native-svg";
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, interpolateColor, ReduceMotion } from 'react-native-reanimated';
-export function Landscape({ night }: { night: number }) {
+export function Landscape({
+  night,
+  onEnterHouse,
+}: {
+  night: number;
+  onEnterHouse?: () => void;
+}) {
   const light = useSharedValue(night);
   useEffect(() => { light.value = withTiming(night, {duration: 2000, reduceMotion: ReduceMotion.System}); }, [night]);
   const sky = useAnimatedStyle(() => ({backgroundColor: interpolateColor(light.value, [0,1], ['#BFE8F9','#414858'])}));
@@ -72,6 +78,20 @@ export function Landscape({ night }: { night: number }) {
       >
         HOME, SWEET LITTLE HOME
       </Text>
+      {onEnterHouse && (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Enter your cottage"
+          onPress={onEnterHouse}
+          style={{
+            position: "absolute",
+            left: "41%",
+            bottom: 10,
+            width: 90,
+            height: 58,
+          }}
+        />
+      )}
     </Animated.View>
   );
 }

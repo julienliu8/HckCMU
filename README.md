@@ -18,7 +18,7 @@ For reproducible dependencies, this project includes `pnpm-lock.yaml`: use `pnpm
 ## Demo
 
 - **Outside:** 14 preloaded flowers dated to the previous 14 local days. Bright flowers glow, heavy flowers have vines. Tap a flower to open its journal; Trim Weeds animates the vines away and preserves the entry.
-- **Inside:** three mock friends and hand-painted pots. Each vase shows exactly three overlapping flowers, ordered oldest bottom-left to newest top-right. Prune Vase produces a Reanimated spark, requests device haptics, and shows “Notification sent!” The notification is simulated; no message leaves the device.
+- **Inside:** three mock friends and hand-painted pots. Each vase shows exactly three overlapping flowers, ordered oldest bottom-left to newest top-right. Tap the cottage door sign to step back outside.
 - **Create:** choose a flower shape, a circular color palette, and a feeling; write a private journal; paint a 20×20 pot by tapping or dragging. Eraser and Reset Pot are available. Plant once per local calendar day.
 - **Clock:** live device time updates every 15 seconds and on foregrounding. The sky transitions at dawn (06:00–08:00) and dusk (18:00–20:00). Reduced-motion preferences are respected by animations.
 
@@ -48,32 +48,33 @@ Native haptics, keyboard behavior, and physical device safe areas require an iOS
 
 ## Multiplayer hackathon demo
 
-Two modes are available under **Inside → Multiplayer**:
+Use **Inside → Flower Post**:
 
-- **This device:** choose Alex, send a flower to Maya, then choose Maya. Her arrivals shelf shows the flower and your painted pot. This is an explicitly labeled simulation. It is kept in memory and resets on page reload.
-- **Live room:** separate screens exchange real demo gifts through the local room server, with updates about once per second. Choose different demo identities on each screen and the same room code. Identities affect gift exchanges only; they do not switch or expose private journals.
+- Set your cottage name and share your generated friend code.
+- Add friends by name + friend code.
+- Send flowers directly to saved friends. The receiver sees the flower and painted pot in their arrivals shelf.
 
-Start the live demo from this folder in two steps:
+Start the demo server from this folder in two steps:
 
 ```sh
 npm run demo:build
 npm run demo:server
 ```
 
-Open `http://localhost:8787` on the laptop. For other devices on the same Wi-Fi, use the `Same Wi-Fi` URL printed by the server. Each person opens **Inside**, selects **Live room**, and chooses a different name. The default room code is `hackathon`. Browser clients automatically use the laptop host for the API. In Expo Go, enter the printed laptop URL in **Demo server address**, or configure `EXPO_PUBLIC_DEMO_API_URL` before starting Expo.
+Open `http://localhost:8787` on the laptop. For other devices on the same Wi-Fi, use the `Same Wi-Fi` URL printed by the server. Browser clients automatically use the laptop host for the API. In Expo Go, enter the printed laptop URL in **Demo server address**, or configure `EXPO_PUBLIC_DEMO_API_URL` before starting Expo.
 
 The server serves the web build and gift API on port 8787. The laptop must stay running. Venue Wi-Fi isolation or a firewall may prevent phones connecting; two browser windows on the laptop are a reliable fallback. No cloud deployment or account setup is required.
 
 ### A 60-second judging demo
 
 1. Show a heavy flower in Outside and trim its weeds while keeping its journal unchanged.
-2. Open Inside in two browser windows; use Live room and room `hackathon` on both.
-3. Choose Alex in the first window and Maya in the second.
-4. As Alex, click Send a flower, choose Maya, choose a flower/color, and send.
-5. Watch Maya's arrivals shelf fill with the flower and the sender's painted pot.
-6. As Maya, send a different flower back to Alex. Neither exchange includes journal text.
+2. Open Inside in two browser windows and connect both to the same Flower Post server.
+3. Copy each device's friend code and add each other as friends.
+4. Send a flower to your friend from one device.
+5. Watch the other device's arrivals shelf fill with the flower and sender's painted pot.
+6. Send a flower back. Neither exchange includes journal text.
 
-The receiver displays up to three latest flowers per sender. Server state holds at most 100 gifts per room and resets on server restart. These are shared demo rooms without authentication; all participants in a room can inspect its gift data or choose any demo identity. Use fictional identities and sample artwork. This is a live multiplayer prototype, not a production privacy or notification system. Gift payload validation rejects journal fields and malformed artwork; retries with the same gift ID are deduplicated.
+The receiver displays up to three latest flowers per sender. Server state holds at most 100 gifts in the shared Flower Post room and resets on server restart. There is no authentication, so friend codes are for demo routing only. Use fictional names and sample artwork. This is a hackathon prototype, not a production privacy or notification system. Gift payload validation rejects journal fields and malformed artwork; retries with the same gift ID are deduplicated.
 
 
 ### Windows build note

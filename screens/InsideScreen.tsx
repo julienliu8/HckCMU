@@ -32,7 +32,13 @@ function Vase({ friend, spark = 0 }: { friend: Friend; spark?: number }) {
     </View>
   );
 }
-export function InsideScreen({ night }: { night: number }) {
+export function InsideScreen({
+  night,
+  onExitHouse,
+}: {
+  night: number;
+  onExitHouse: () => void;
+}) {
   const friends = useVillage((s) => s.friends);
   const [selected, setSelected] = useState<string | null>(null);
   const [spark, setSpark] = useState(0);
@@ -57,6 +63,14 @@ export function InsideScreen({ night }: { night: number }) {
         showsVerticalScrollIndicator={false}
       >
         <Label>INSIDE / THE FRIENDSHIP SHELF</Label>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Step outside to your garden"
+          onPress={onExitHouse}
+          className="self-start border-2 border-b-4 border-[#9E451C] px-3 py-2 bg-[#F4D1A8]"
+        >
+          <Text className="font-pixel text-[10px] text-bark">↩ COTTAGE DOOR</Text>
+        </Pressable>
         <View className="gap-2">
           <Text className="text-bark text-3xl font-bold">
             Keep your people close.
@@ -157,7 +171,7 @@ export function InsideScreen({ night }: { night: number }) {
           </Text>
         </View>
         <Text className="font-pixel text-[9px] text-bark text-center">
-          DEMO FRIENDS · SIMULATED NOTIFICATIONS
+          FRIENDSHIP SHELF · FLOWER POST BELOW
         </Text>
       </ScrollView>
       {friend && (
