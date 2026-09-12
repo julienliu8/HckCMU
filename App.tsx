@@ -4,6 +4,10 @@ import { Image, Platform, View, Text, Pressable } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
+import {
+  PatrickHand_400Regular,
+  useFonts,
+} from "@expo-google-fonts/patrick-hand";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -42,6 +46,7 @@ const startingClouds = [
 export default function App() {
   const [place, setPlace] = useState<Place>("outside");
   const [entered, setEntered] = useState(false);
+  const [fontsLoaded, fontError] = useFonts({ PatrickHand_400Regular });
   const { now, night } = useVillageClock();
   const hydrated = useVillage((s) => s.hydrated),
     storageError = useVillage((s) => s.storageError);
@@ -59,6 +64,10 @@ export default function App() {
       ["#D7F0E8", "#414858"],
     ),
   }));
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <StatusBar style={night > 0.5 ? "light" : "dark"} />
@@ -202,7 +211,7 @@ export default function App() {
                     Pruned
                   </Text>
                   <Text className="font-pixel text-[9px] text-moss mt-3 tracking-widest text-center">
-                    A SOFTER PLACE TO LAND
+                    WELCOME BACK
                   </Text>
                 </View>
                 <Text
@@ -240,7 +249,7 @@ export default function App() {
                       Pruned
                     </Text>
                     <Text className="font-pixel text-[8px] text-bark mt-1 tracking-widest">
-                      A SOFTER PLACE TO LAND
+                      WELCOME BACK
                     </Text>
                   </View>
                 </Pressable>
@@ -306,6 +315,7 @@ export default function App() {
                       }}
                     >
                       <Text
+                        className="font-pixel"
                         style={{
                           fontSize: 18,
                           color: place === item.id ? "#FFF8EA" : "#662305",

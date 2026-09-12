@@ -36,10 +36,10 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
         <Label>THE DAILY RITUAL / FLOWER & POT STUDIO</Label>
         <View className="gap-2">
           <Text className="font-pixel text-bark text-3xl font-bold">
-            Make room for a feeling.
+            Welcome back to the studio.
           </Text>
           <Text className="font-pixel text-bark text-sm leading-6">
-            No right color. No perfect words. Just you.
+            Pick a flower, choose a color, and write today's entry.
           </Text>
         </View>
         <View className="items-center py-2 bg-[#F4D8B2] border-2 border-[#D6A775]">
@@ -58,7 +58,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
             </View>
           </View>
           <Text className="font-pixel text-[9px] text-bark mb-3">
-            A LITTLE PIECE OF YOU
+            FLOWER PREVIEW
           </Text>
         </View>
         <View className="gap-3">
@@ -147,12 +147,12 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
             ))}
           </View>
           <Text className="font-pixel text-xs text-bark leading-5 opacity-75">
-            Bright flowers glow. Heavy days grow vines you can tend later. Every
-            flower stays.
+            Bright adds a glow. Heavy adds vines you can prune later. Entries
+            stay in the garden.
           </Text>
         </View>
         <View className="gap-3">
-          <Label>04 / A PAGE JUST FOR YOU</Label>
+          <Label>04 / TODAY'S ENTRY</Label>
           <TextInput
             accessibilityLabel="Private journal"
             multiline

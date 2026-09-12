@@ -240,11 +240,10 @@ export function InsideScreen({
         </Pressable>
         <View className="gap-2">
           <Text className="font-pixel text-bark text-3xl font-bold">
-            Keep your people close.
+            Welcome back to the shelf.
           </Text>
           <Text className="font-pixel text-bark text-sm leading-6 opacity-75">
-            Three little flowers. A glimpse of their days.{"\n"}A gentle way to
-            say, “I’m here.”
+            Friend flowers and notes are waiting here.{"\n"}Tap a vase to check in.
           </Text>
         </View>
         <MultiplayerPanel />
@@ -347,10 +346,9 @@ export function InsideScreen({
           </Text>
         </View>
         <View className="p-4 border-l-4 border-moss bg-cream gap-2">
-          <Text className="font-pixel text-bark font-bold">A tiny act of care.</Text>
+          <Text className="font-pixel text-bark font-bold">Friend vase actions.</Text>
           <Text className="font-pixel text-bark text-sm leading-6">
-            Tap a pot to prune a friend’s vase. Their words stay private; the
-            flowers are what they share.
+            Tap a pot to open a friend's corner. Notes appear as small paper tags.
           </Text>
         </View>
         <Text className="font-pixel text-[9px] text-bark text-center">
@@ -383,8 +381,7 @@ export function InsideScreen({
             <Label>{friend.note}</Label>
           </View>
           <Text className="font-pixel text-center text-bark leading-6">
-            A little tending, just to let them know{"\n"}you’re thinking of
-            them.
+            Prune the vase or ring for a demo bloom.
           </Text>
           <PixelButton label="PRUNE VASE ✦" onPress={prune} />
           <PixelButton

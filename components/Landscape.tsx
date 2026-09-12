@@ -72,7 +72,7 @@ export function Landscape({
           bottom: 7,
           right: 12,
           color: "#FFF4E3",
-          fontFamily: "monospace",
+          fontFamily: "PatrickHand_400Regular",
           fontSize: 9,
         }}
       >

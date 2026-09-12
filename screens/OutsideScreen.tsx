@@ -28,11 +28,10 @@ export function OutsideScreen({
         <View className="px-6 pt-5 gap-2">
           <Label>OUTSIDE / YOUR PERMANENT GARDEN</Label>
           <Text className="font-pixel text-bark text-3xl font-bold">
-            Every day takes root.
+            Welcome back to your garden.
           </Text>
           <Text className="font-pixel text-bark text-sm leading-6 opacity-75">
-            Some days bloom. Some need a little tending.{"\n"}They all belong
-            here.
+            Your patch is just as you left it.{"\n"}Tap a flower to revisit it.
           </Text>
         </View>
         <Landscape night={night} onEnterHouse={onEnterHouse} />
@@ -103,18 +102,18 @@ export function OutsideScreen({
           <View className="flex-row justify-between">
             <Text className="font-pixel text-bark font-bold text-lg flex-1">
               {hasToday
-                ? "Today has a place here."
-                : "What will you grow today?"}
+                ? "Today's flower is planted."
+                : "Ready for today's flower?"}
             </Text>
             <Text className="font-pixel text-moss text-xl">✿</Text>
           </View>
           <Text className="font-pixel text-bark text-sm leading-6">
             {hasToday
               ? "Your flower is planted. Tap it to revisit your words, or give your pot a little color."
-              : "Choose a flower, leave a few words, and add a small piece of yourself to the garden."}
+              : "Choose a flower, add a short entry, and plant it in your patch."}
           </Text>
           <PixelButton
-            label={hasToday ? "OPEN POT STUDIO →" : "PLANT A FEELING +"}
+            label={hasToday ? "OPEN POT STUDIO →" : "PLANT TODAY +"}
             onPress={onCreate}
           />
           <PixelButton
@@ -124,12 +123,12 @@ export function OutsideScreen({
           />
         </View>
         <Text className="text-center font-pixel text-[9px] text-bark">
-          NO PERFECT DAYS REQUIRED.
+          GARDEN READY.
         </Text>
       </ScrollView>
       {bloom && (
         <Sheet
-          title="A little room to reflect"
+          title="Garden entry"
           onClose={() => setSelected(null)}
         >
           <View className="items-center gap-3">
@@ -145,10 +144,11 @@ export function OutsideScreen({
             </Label>
           </View>
           <Text className="font-pixel text-bark text-base leading-7">
-            {bloom.journal || "A feeling was enough today."}
+            {bloom.journal || "No words saved for this day."}
           </Text>
           <Text className="font-pixel text-bark text-xs leading-5 opacity-70">
-            Your private page. Tending the flower keeps the memory intact.
+            This entry stays private on this device. Pruning only updates the
+            flower.
           </Text>
           {bloom.feeling === "heavy" && (
             <PixelButton

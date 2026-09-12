@@ -36,7 +36,7 @@ export function PotPainter({
               justifyContent: "center",
             }}
           >
-            {!c && <Text>×</Text>}
+            {!c && <Text className="font-pixel text-bark">×</Text>}
           </Pressable>
         ))}
       </View>
