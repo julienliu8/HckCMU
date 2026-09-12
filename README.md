@@ -61,14 +61,14 @@ npm run demo:build
 npm run demo:server
 ```
 
-Open `http://localhost:8787` on the laptop. For other devices on the same Wi-Fi, use the `Same Wi-Fi` URL printed by the server. Browser clients automatically use the laptop host for the API. In Expo Go, enter the printed laptop URL in **Demo server address**, or configure `EXPO_PUBLIC_DEMO_API_URL` before starting Expo.
+Open `http://localhost:8787` on the laptop. For other devices on the same Wi-Fi, use the `Same Wi-Fi` URL printed by the server. Browser clients automatically use the laptop host for the API. In Expo Go, Bloom Village infers the laptop host from Metro and uses port `8787`; if needed, configure `EXPO_PUBLIC_DEMO_API_URL` before starting Expo.
 
 The server serves the web build and gift API on port 8787. The laptop must stay running. Venue Wi-Fi isolation or a firewall may prevent phones connecting; two browser windows on the laptop are a reliable fallback. No cloud deployment or account setup is required.
 
 ### A 60-second judging demo
 
 1. Show a heavy flower in Outside and trim its weeds while keeping its journal unchanged.
-2. Open Inside in two browser windows and connect both to the same Flower Post server.
+2. Open Inside in two browser windows.
 3. Copy each device's friend code and add each other as friends.
 4. Send a flower to your friend from one device.
 5. Watch the other device's arrivals shelf fill with the flower and sender's painted pot.

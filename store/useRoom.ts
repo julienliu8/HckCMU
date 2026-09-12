@@ -1,11 +1,22 @@
 import { create } from "zustand";
-import { Platform } from "react-native";
+import { NativeModules, Platform } from "react-native";
 import { Gift, validateGift } from "./gifting";
-const defaultApi =
-  process.env.EXPO_PUBLIC_DEMO_API_URL ||
-  (Platform.OS === "web" && typeof window !== "undefined"
-    ? `http://${window.location.hostname}:8787`
-    : "http://localhost:8787");
+
+function getDefaultApi() {
+  if (process.env.EXPO_PUBLIC_DEMO_API_URL) {
+    return process.env.EXPO_PUBLIC_DEMO_API_URL;
+  }
+
+  if (Platform.OS === "web" && typeof window !== "undefined") {
+    return `http://${window.location.hostname}:8787`;
+  }
+
+  const scriptUrl = NativeModules.SourceCode?.scriptURL as string | undefined;
+  const host = scriptUrl?.match(/^https?:\/\/([^/:]+)/)?.[1];
+  return host ? `http://${host}:8787` : "http://localhost:8787";
+}
+
+const defaultApi = getDefaultApi();
 type RoomState = {
   api: string;
   room: string;
@@ -13,11 +24,9 @@ type RoomState = {
   error: string;
   connected: boolean;
   pending: boolean;
-  setApi: (api: string) => void;
   refresh: () => Promise<void>;
   send: (gift: Gift) => Promise<boolean>;
 };
-let generation = 0;
 async function request(api: string, path: string, body?: Gift) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 5000);
@@ -42,51 +51,36 @@ export const useRoom = create<RoomState>((set, get) => ({
   error: "",
   connected: false,
   pending: false,
-  setApi: (api) => {
-    generation++;
-    set({
-      api: api.trim(),
-      error: "",
-      connected: false,
-    });
-  },
   refresh: async () => {
     const { api, room } = get();
-    const ticket = generation;
     try {
       const data = await request(api, `/api/rooms/${encodeURIComponent(room)}`);
-      if (ticket === generation)
-        set({
-          gifts: data.gifts.map(validateGift),
-          connected: true,
-          error: "",
-        });
+      set({
+        gifts: data.gifts.map(validateGift),
+        connected: true,
+        error: "",
+      });
     } catch {
-      if (ticket === generation)
-        set({
-          connected: false,
-          error:
-            "Cannot reach the flower post. Start the demo server and check the server address.",
-        });
+      set({
+        connected: false,
+        error: "",
+      });
     }
   },
   send: async (input) => {
     if (get().pending) return false;
     const gift = validateGift(input);
     const { api, room } = get();
-    const ticket = generation;
     set({ pending: true, error: "" });
     try {
       await request(api, `/api/rooms/${encodeURIComponent(room)}/gifts`, gift);
-      if (ticket === generation) await get().refresh();
+      await get().refresh();
       return true;
     } catch {
-      if (ticket === generation)
-        set({
-          error:
-            "Flower was not confirmed. Check the connection and try again.",
-          connected: false,
-        });
+      set({
+        error: "The flower post is still waking up. Try again in a moment.",
+        connected: false,
+      });
       return false;
     } finally {
       set({ pending: false });

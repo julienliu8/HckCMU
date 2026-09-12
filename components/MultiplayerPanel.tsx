@@ -8,7 +8,7 @@ import { PixelFlower, PixelPot, Spark } from "./PixelArt";
 import { PixelButton, Label, Sheet } from "./PixelUI";
 
 export function MultiplayerPanel() {
-  const { api, gifts, error, connected, pending, setApi, refresh, send } = useRoom();
+  const { gifts, error, pending, refresh, send } = useRoom();
   const pot = useVillage((s) => s.pot);
   const draft = useVillage((s) => s.draft);
   const profile = useVillage((s) => s.profile);
@@ -22,7 +22,6 @@ export function MultiplayerPanel() {
   const [shape, setShape] = useState<Shape>(draft.shape);
   const [color, setColor] = useState(draft.color);
   const [receipt, setReceipt] = useState("");
-  const [address, setAddress] = useState(api);
   const [attempt, setAttempt] = useState<Gift | null>(null);
   const [nameInput, setNameInput] = useState(profile.name);
   const [friendName, setFriendName] = useState("");
@@ -40,7 +39,7 @@ export function MultiplayerPanel() {
       active = false;
       clearTimeout(timer);
     };
-  }, [api]);
+  }, [refresh]);
 
   useEffect(() => {
     if (!contacts.some((c) => c.id === recipient)) {
@@ -78,8 +77,7 @@ export function MultiplayerPanel() {
     <View className="border-2 border-moss bg-cream p-4 gap-4">
       <Label>FRIENDS / FLOWER POST</Label>
       <Text className="text-xs text-bark leading-5">
-        Add a friend code, then send flowers right from your shelf. No room-join
-        step needed.
+        Add a friend code, then send flowers right from your shelf.
       </Text>
 
       <View className="gap-2">
@@ -95,29 +93,6 @@ export function MultiplayerPanel() {
         <Text className="font-pixel text-[10px] text-bark">
           YOUR FRIEND CODE: {profile.id}
         </Text>
-      </View>
-
-      <View className="gap-2 border-t border-[#D8B58A] pt-3">
-        <Text className="font-pixel text-[10px] text-bark">FLOWER POST SERVER</Text>
-        <TextInput
-          accessibilityLabel="Demo server address"
-          value={address}
-          onChangeText={setAddress}
-          autoCapitalize="none"
-          autoCorrect={false}
-          className="border border-bark p-3 text-bark text-xs"
-          placeholder="http://localhost:8787"
-          placeholderTextColor="#866648"
-        />
-        <PixelButton
-          light
-          label={connected ? "CONNECTED ✓" : "CONNECT TO FLOWER POST"}
-          disabled={!/^https?:\/\//.test(address) || pending}
-          onPress={() => {
-            setApi(address);
-            setReceipt("");
-          }}
-        />
       </View>
 
       <View className="border-t border-[#D8B58A] pt-4 gap-2">
@@ -200,7 +175,7 @@ export function MultiplayerPanel() {
       <PixelButton
         label="SEND A FLOWER →"
         onPress={() => begin()}
-        disabled={pending || !connected || contacts.length === 0}
+        disabled={pending || contacts.length === 0}
       />
 
       {receipt.length > 0 && (
@@ -256,7 +231,7 @@ export function MultiplayerPanel() {
                     {blooms.length} recent {blooms.length === 1 ? "flower" : "flowers"}.
                   </Text>
                   <Text className="font-pixel text-[9px] text-moss">
-                    DELIVERED THROUGH FLOWER POST
+                    A LITTLE BLOOM ARRIVED
                   </Text>
                 </View>
               </View>
