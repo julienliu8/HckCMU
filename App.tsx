@@ -54,7 +54,7 @@ export default function App() {
               <View className="flex-row justify-between items-center gap-2">
                 <View>
                   <Text className="font-pixel text-lg font-bold text-bark">
-                    bloom village<Text className="text-moss"> ✿</Text>
+                    Pruned<Text className="text-moss"> ✿</Text>
                   </Text>
                   <Text className="font-pixel text-[8px] text-bark mt-1 tracking-widest">
                     A SOFTER PLACE TO LAND

@@ -123,7 +123,7 @@ export const useVillage = create<VillageState>()(
       },
     }),
     {
-      name: "bloom-village-v1",
+      name: "pruned-v1",
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (s) => ({
         history: s.history,

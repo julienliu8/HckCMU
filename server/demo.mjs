@@ -98,7 +98,7 @@ if (
 ) {
   const port = Number(process.env.DEMO_PORT || 8787);
   createDemoServer().listen(port, "0.0.0.0", () => {
-    console.log(`Bloom Village demo: http://localhost:${port}`);
+    console.log(`Pruned demo: http://localhost:${port}`);
     for (const entries of Object.values(networkInterfaces()))
       for (const item of entries || [])
         if (item.family === "IPv4" && !item.internal)

@@ -46,7 +46,7 @@ async function request(api: string, path: string, body?: Gift) {
 }
 export const useRoom = create<RoomState>((set, get) => ({
   api: defaultApi,
-  room: "bloom-village",
+  room: "pruned",
   gifts: [],
   error: "",
   connected: false,

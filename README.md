@@ -1,4 +1,4 @@
-# Bloom Village
+# Pruned
 
 Cozy pixel-art journaling prototype built with Expo Managed (SDK 57), React Native, Reanimated 4, Zustand, NativeWind 4, and react-native-safe-area-context.
 
@@ -61,7 +61,7 @@ npm run demo:build
 npm run demo:server
 ```
 
-Open `http://localhost:8787` on the laptop. For other devices on the same Wi-Fi, use the `Same Wi-Fi` URL printed by the server. Browser clients automatically use the laptop host for the API. In Expo Go, Bloom Village infers the laptop host from Metro and uses port `8787`; if needed, configure `EXPO_PUBLIC_DEMO_API_URL` before starting Expo.
+Open `http://localhost:8787` on the laptop. For other devices on the same Wi-Fi, use the `Same Wi-Fi` URL printed by the server. Browser clients automatically use the laptop host for the API. In Expo Go, Pruned infers the laptop host from Metro and uses port `8787`; if needed, configure `EXPO_PUBLIC_DEMO_API_URL` before starting Expo.
 
 The server serves the web build and gift API on port 8787. The laptop must stay running. Venue Wi-Fi isolation or a firewall may prevent phones connecting; two browser windows on the laptop are a reliable fallback. No cloud deployment or account setup is required.
 
