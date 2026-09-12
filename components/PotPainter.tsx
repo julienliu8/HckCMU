@@ -88,7 +88,7 @@ export function PotPainter({
           20 × 20 / saved as you paint
         </Text>
         <Pressable accessibilityRole="button" onPress={reset} className="p-3">
-          <Text className="text-xs text-bark underline">Reset pot</Text>
+          <Text className="font-pixel text-xs text-bark underline">Reset pot</Text>
         </Pressable>
       </View>
     </View>

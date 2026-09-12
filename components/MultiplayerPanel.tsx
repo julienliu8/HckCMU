@@ -91,7 +91,7 @@ export function MultiplayerPanel() {
   return (
     <View className="border-2 border-moss bg-cream p-4 gap-4">
       <Label>FRIENDS / FLOWER POST</Label>
-      <Text className="text-xs text-bark leading-5">
+      <Text className="font-pixel text-xs text-bark leading-5">
         Add a friend code, then send flowers right from your shelf.
       </Text>
 
@@ -102,7 +102,7 @@ export function MultiplayerPanel() {
           value={nameInput}
           onChangeText={setNameInput}
           maxLength={24}
-          className="border border-bark p-3 text-bark text-sm"
+          className="font-pixel border border-bark p-3 text-bark text-sm"
           onBlur={() => setProfileName(nameInput)}
         />
         <Text className="font-pixel text-[10px] text-bark">
@@ -115,7 +115,7 @@ export function MultiplayerPanel() {
           YOUR FRIENDS · {contacts.length}/{MAX_FRIENDS}
         </Text>
         {!contacts.length ? (
-          <Text className="text-xs text-bark leading-5">
+          <Text className="font-pixel text-xs text-bark leading-5">
             Add a friend to start sharing flowers across devices.
           </Text>
         ) : (
@@ -125,7 +125,7 @@ export function MultiplayerPanel() {
                 key={f.id}
                 className="border border-[#D8B58A] bg-[#FFF1DA] px-3 py-2"
               >
-                <Text className="text-bark text-xs font-bold">{f.name}</Text>
+                <Text className="font-pixel text-bark text-xs font-bold">{f.name}</Text>
                 <Text className="font-pixel text-[9px] text-bark opacity-70">
                   {f.id}
                 </Text>
@@ -153,7 +153,7 @@ export function MultiplayerPanel() {
         )}
         <View className="gap-2 border-2 border-[#D8B58A] bg-[#FCE7CC] p-3">
           <Text className="font-pixel text-[10px] text-bark">ADD A FRIEND</Text>
-          <Text className="text-xs text-bark leading-5">
+          <Text className="font-pixel text-xs text-bark leading-5">
             {friendLimitReached
               ? `Your shelf has room for ${MAX_FRIENDS} friends. Remove one to make space for someone new.`
               : `There is room for ${MAX_FRIENDS - contacts.length} more ${
@@ -166,7 +166,7 @@ export function MultiplayerPanel() {
             onChangeText={setFriendName}
             maxLength={24}
             editable={!friendLimitReached}
-            className="border border-bark p-2 text-bark text-xs"
+            className="font-pixel border border-bark p-2 text-bark text-xs"
             placeholder="Friend name"
             placeholderTextColor="#866648"
           />
@@ -178,7 +178,7 @@ export function MultiplayerPanel() {
             autoCorrect={false}
             maxLength={32}
             editable={!friendLimitReached}
-            className="border border-bark p-2 text-bark text-xs"
+            className="font-pixel border border-bark p-2 text-bark text-xs"
             placeholder="friend code"
             placeholderTextColor="#866648"
           />
@@ -210,12 +210,12 @@ export function MultiplayerPanel() {
       />
 
       {receipt.length > 0 && (
-        <Text accessibilityRole="alert" className="text-sm text-moss font-bold">
+        <Text accessibilityRole="alert" className="font-pixel text-sm text-moss font-bold">
           {receipt}
         </Text>
       )}
       {error.length > 0 && (
-        <Text accessibilityRole="alert" className="text-xs text-bark leading-5">
+        <Text accessibilityRole="alert" className="font-pixel text-xs text-bark leading-5">
           {error}
         </Text>
       )}
@@ -225,7 +225,7 @@ export function MultiplayerPanel() {
           ARRIVALS FOR {profile.name.toUpperCase()} · {received.length}
         </Text>
         {!received.length ? (
-          <Text className="text-xs text-bark leading-5">
+          <Text className="font-pixel text-xs text-bark leading-5">
             Your shelf is waiting for its first flower.
           </Text>
         ) : (
@@ -292,8 +292,8 @@ export function MultiplayerPanel() {
                   })}
                 </View>
                 <View className="flex-1 gap-2">
-                  <Text className="text-bark font-bold">From {senderName}</Text>
-                  <Text className="text-xs text-bark leading-5">
+                  <Text className="font-pixel text-bark font-bold">From {senderName}</Text>
+                  <Text className="font-pixel text-xs text-bark leading-5">
                     {blooms.length} recent {blooms.length === 1 ? "flower" : "flowers"}.
                   </Text>
                   <Text className="font-pixel text-[9px] text-moss">
@@ -336,7 +336,7 @@ export function MultiplayerPanel() {
                   backgroundColor: recipient === f.id ? "#E7F2D2" : "#FFF4E3",
                 }}
               >
-                <Text className="text-bark">{f.name}</Text>
+                <Text className="font-pixel text-bark">{f.name}</Text>
               </Pressable>
             ))}
           </View>
@@ -394,7 +394,7 @@ export function MultiplayerPanel() {
               editable={!pending}
               multiline
               maxLength={MAX_GIFT_NOTE_LENGTH}
-              className="border-2 border-[#D8B58A] bg-[#FFF9EF] p-3 text-bark text-sm"
+              className="font-pixel border-2 border-[#D8B58A] bg-[#FFF9EF] p-3 text-bark text-sm"
               placeholder="A little hello..."
               placeholderTextColor="#866648"
               style={{ minHeight: 82, textAlignVertical: "top" }}
@@ -403,7 +403,7 @@ export function MultiplayerPanel() {
               {note.length}/{MAX_GIFT_NOTE_LENGTH}
             </Text>
           </View>
-          <Text className="text-bark text-sm leading-6">
+          <Text className="font-pixel text-bark text-sm leading-6">
             Sharing: this flower, your painted pot, and this note.{"\n"}Your journal text stays private.
           </Text>
           <PixelButton
@@ -436,7 +436,7 @@ export function MultiplayerPanel() {
             }}
           />
           {error.length > 0 && (
-            <Text accessibilityRole="alert" className="text-bark text-xs">
+            <Text accessibilityRole="alert" className="font-pixel text-bark text-xs">
               {error}
             </Text>
           )}
@@ -457,7 +457,7 @@ export function MultiplayerPanel() {
               className="border-2 border-[#9E451C] bg-[#FFF9EF] p-4 mt-2"
               style={{ width: "100%" }}
             >
-              <Text className="text-bark text-base leading-7">
+              <Text className="font-pixel text-bark text-base leading-7">
                 {selectedNote.note}
               </Text>
             </View>

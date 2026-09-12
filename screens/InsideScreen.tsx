@@ -239,10 +239,10 @@ export function InsideScreen({
           <Text className="font-pixel text-[10px] text-bark">↩ COTTAGE DOOR</Text>
         </Pressable>
         <View className="gap-2">
-          <Text className="text-bark text-3xl font-bold">
+          <Text className="font-pixel text-bark text-3xl font-bold">
             Keep your people close.
           </Text>
-          <Text className="text-bark text-sm leading-6 opacity-75">
+          <Text className="font-pixel text-bark text-sm leading-6 opacity-75">
             Three little flowers. A glimpse of their days.{"\n"}A gentle way to
             say, “I’m here.”
           </Text>
@@ -347,8 +347,8 @@ export function InsideScreen({
           </Text>
         </View>
         <View className="p-4 border-l-4 border-moss bg-cream gap-2">
-          <Text className="text-bark font-bold">A tiny act of care.</Text>
-          <Text className="text-bark text-sm leading-6">
+          <Text className="font-pixel text-bark font-bold">A tiny act of care.</Text>
+          <Text className="font-pixel text-bark text-sm leading-6">
             Tap a pot to prune a friend’s vase. Their words stay private; the
             flowers are what they share.
           </Text>
@@ -382,7 +382,7 @@ export function InsideScreen({
             />
             <Label>{friend.note}</Label>
           </View>
-          <Text className="text-center text-bark leading-6">
+          <Text className="font-pixel text-center text-bark leading-6">
             A little tending, just to let them know{"\n"}you’re thinking of
             them.
           </Text>
@@ -400,7 +400,7 @@ export function InsideScreen({
               <Text className="font-pixel font-bold text-bark">
                 Notification sent!
               </Text>
-              <Text className="text-bark text-xs">
+              <Text className="font-pixel text-bark text-xs">
                 Demo only — no real notification was sent.
               </Text>
             </View>
@@ -422,7 +422,7 @@ export function InsideScreen({
               className="border-2 border-[#9E451C] bg-[#FFF9EF] p-4 mt-2"
               style={{ width: "100%" }}
             >
-              <Text className="text-bark text-base leading-7">
+              <Text className="font-pixel text-bark text-base leading-7">
                 {selectedNote.flower.note}
               </Text>
             </View>

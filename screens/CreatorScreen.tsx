@@ -35,10 +35,10 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
       >
         <Label>THE DAILY RITUAL / FLOWER & POT STUDIO</Label>
         <View className="gap-2">
-          <Text className="text-bark text-3xl font-bold">
+          <Text className="font-pixel text-bark text-3xl font-bold">
             Make room for a feeling.
           </Text>
-          <Text className="text-bark text-sm leading-6">
+          <Text className="font-pixel text-bark text-sm leading-6">
             No right color. No perfect words. Just you.
           </Text>
         </View>
@@ -146,7 +146,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
               </Pressable>
             ))}
           </View>
-          <Text className="text-xs text-bark leading-5 opacity-75">
+          <Text className="font-pixel text-xs text-bark leading-5 opacity-75">
             Bright flowers glow. Heavy days grow vines you can tend later. Every
             flower stays.
           </Text>
@@ -162,7 +162,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
             placeholder="What’s on your mind today?"
             placeholderTextColor="#9E7A5D"
             textAlignVertical="top"
-            className="border-2 border-[#D8B58A] bg-cream p-4 text-bark text-base"
+            className="font-pixel border-2 border-[#D8B58A] bg-cream p-4 text-bark text-base"
             style={{ minHeight: 140, lineHeight: 25 }}
           />
           <Text className="font-pixel text-[9px] text-bark">
@@ -171,20 +171,20 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
         </View>
         <View className="gap-4">
           <Label>05 / PAINT YOUR POT</Label>
-          <Text className="text-sm text-bark leading-6">
+          <Text className="font-pixel text-sm text-bark leading-6">
             Pick a brush, then tap or drag over the pixels. Your pot is saved as
             you go.
           </Text>
           <PotPainter onPainting={setPainting} />
         </View>
         {error.length > 0 && (
-          <Text accessibilityRole="alert" className="text-bark">
+          <Text accessibilityRole="alert" className="font-pixel text-bark">
             {error}
           </Text>
         )}
         {planted ? (
           <View className="gap-3">
-            <Text className="text-bark text-sm">
+            <Text className="font-pixel text-bark text-sm">
               Today’s flower is already planted. Your pot edits still save.
             </Text>
             <PixelButton label="BACK TO MY GARDEN →" onPress={onDone} />

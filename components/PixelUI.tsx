@@ -74,7 +74,7 @@ export function Sheet({
               onPress={onClose}
               className="w-11 h-11 items-center justify-center"
             >
-              <Text className="text-bark text-2xl">×</Text>
+              <Text className="font-pixel text-bark text-2xl">×</Text>
             </Pressable>
           </View>
           <ScrollView

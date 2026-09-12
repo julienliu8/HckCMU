@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Image, Platform, View, Text, Pressable } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -15,7 +16,29 @@ import { useVillage } from "./store/useVillage";
 import { OutsideScreen } from "./screens/OutsideScreen";
 import { InsideScreen } from "./screens/InsideScreen";
 import { CreatorScreen } from "./screens/CreatorScreen";
+import { PixelFlower } from "./components/PixelArt";
 type Place = "outside" | "inside" | "creator";
+
+const startingFlowers = [
+  { left: "8%", bottom: 102, shape: "daisy", color: "#F7C948", size: 52 },
+  { left: "20%", bottom: 142, shape: "tulip", color: "#F5822A", size: 46 },
+  { left: "32%", bottom: 108, shape: "sunflower", color: "#F7C948", size: 50 },
+  { left: "46%", bottom: 158, shape: "rose", color: "#D94F70", size: 44 },
+  { left: "60%", bottom: 116, shape: "daisy", color: "#FFF4E3", size: 50 },
+  { left: "73%", bottom: 148, shape: "tulip", color: "#F5822A", size: 46 },
+  { left: "86%", bottom: 106, shape: "star", color: "#F7C948", size: 52 },
+  { left: "14%", bottom: 178, shape: "lavender", color: "#D94F70", size: 34 },
+  { left: "38%", bottom: 188, shape: "daisy", color: "#F5822A", size: 32 },
+  { left: "66%", bottom: 184, shape: "sunflower", color: "#F7C948", size: 34 },
+  { left: "82%", bottom: 176, shape: "rose", color: "#FFF4E3", size: 36 },
+] as const;
+
+const startingClouds = [
+  { left: "7%", top: 82, scale: 0.9 },
+  { left: "61%", top: 150, scale: 0.72 },
+  { left: "34%", top: 238, scale: 0.58 },
+] as const;
+
 export default function App() {
   const [place, setPlace] = useState<Place>("outside");
   const [entered, setEntered] = useState(false);
@@ -57,9 +80,81 @@ export default function App() {
               className="flex-1 w-full self-center overflow-hidden"
               style={{
                 maxWidth: 520,
-                backgroundColor: night > 0.5 ? "#394354" : "#D7F0E8",
               }}
             >
+              <LinearGradient
+                pointerEvents="none"
+                colors={
+                  night > 0.5
+                    ? ["#243B59", "#6D91B0"]
+                    : ["#4D91C4", "#BFE8F9"]
+                }
+                start={{ x: 0, y: 0 }}
+                end={{ x: 0, y: 1 }}
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                }}
+              />
+              {startingClouds.map((cloud, i) => (
+                <View
+                  key={`cloud-${i}`}
+                  pointerEvents="none"
+                  style={{
+                    position: "absolute",
+                    left: cloud.left,
+                    top: cloud.top,
+                    width: 104,
+                    height: 32,
+                    opacity: night > 0.5 ? 0.3 : 0.82,
+                    transform: [{ scale: cloud.scale }],
+                  }}
+                >
+                  <View
+                    style={{
+                      position: "absolute",
+                      left: 14,
+                      bottom: 0,
+                      width: 76,
+                      height: 18,
+                      backgroundColor: "#FFF8EA",
+                    }}
+                  />
+                  <View
+                    style={{
+                      position: "absolute",
+                      left: 2,
+                      bottom: 0,
+                      width: 30,
+                      height: 12,
+                      backgroundColor: "#FFF8EA",
+                    }}
+                  />
+                  <View
+                    style={{
+                      position: "absolute",
+                      left: 30,
+                      top: 2,
+                      width: 30,
+                      height: 20,
+                      backgroundColor: "#FFF8EA",
+                    }}
+                  />
+                  <View
+                    style={{
+                      position: "absolute",
+                      left: 56,
+                      top: 8,
+                      width: 26,
+                      height: 14,
+                      backgroundColor: "#FFF8EA",
+                    }}
+                  />
+                </View>
+              ))}
               <View
                 pointerEvents="none"
                 style={{
@@ -73,35 +168,22 @@ export default function App() {
                   borderColor: night > 0.5 ? "#283D2B" : "#6B8E3B",
                 }}
               />
-              <View
-                pointerEvents="none"
-                style={{
-                  position: "absolute",
-                  left: 60,
-                  right: 60,
-                  bottom: 0,
-                  height: 150,
-                  backgroundColor: "#DFA66E",
-                  borderLeftWidth: 4,
-                  borderRightWidth: 4,
-                  borderColor: "#9E451C",
-                }}
-              />
-              {[42, 92, 148, 340, 396, 452].map((left, i) => (
+              {startingFlowers.map((flower, i) => (
                 <View
-                  key={left}
+                  key={`${flower.shape}-${i}`}
                   pointerEvents="none"
                   style={{
                     position: "absolute",
-                    left,
-                    bottom: 94 + (i % 2) * 18,
-                    width: 16,
-                    height: 16,
-                    backgroundColor: i % 3 === 0 ? "#F7C948" : "#F5822A",
-                    borderWidth: 3,
-                    borderColor: "#4C744A",
+                    left: flower.left,
+                    bottom: flower.bottom,
                   }}
-                />
+                >
+                  <PixelFlower
+                    shape={flower.shape}
+                    color={flower.color}
+                    size={flower.size}
+                  />
+                </View>
               ))}
               <View className="flex-1 items-center justify-center px-8">
                 <View
@@ -198,7 +280,7 @@ export default function App() {
                 {storageError && (
                   <Text
                     accessibilityRole="alert"
-                    className="p-2 text-xs text-bark bg-peach"
+                    className="font-pixel p-2 text-xs text-bark bg-peach"
                   >
                     Local storage is unavailable. Changes may not survive a
                     restart.

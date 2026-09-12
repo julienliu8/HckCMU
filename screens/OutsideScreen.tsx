@@ -27,10 +27,10 @@ export function OutsideScreen({
       >
         <View className="px-6 pt-5 gap-2">
           <Label>OUTSIDE / YOUR PERMANENT GARDEN</Label>
-          <Text className="text-bark text-3xl font-bold">
+          <Text className="font-pixel text-bark text-3xl font-bold">
             Every day takes root.
           </Text>
-          <Text className="text-bark text-sm leading-6 opacity-75">
+          <Text className="font-pixel text-bark text-sm leading-6 opacity-75">
             Some days bloom. Some need a little tending.{"\n"}They all belong
             here.
           </Text>
@@ -101,14 +101,14 @@ export function OutsideScreen({
         </View>
         <View className="m-6 p-5 gap-4 border-2 border-b-4 border-bark bg-cream">
           <View className="flex-row justify-between">
-            <Text className="text-bark font-bold text-lg flex-1">
+            <Text className="font-pixel text-bark font-bold text-lg flex-1">
               {hasToday
                 ? "Today has a place here."
                 : "What will you grow today?"}
             </Text>
-            <Text className="text-moss text-xl">✿</Text>
+            <Text className="font-pixel text-moss text-xl">✿</Text>
           </View>
-          <Text className="text-bark text-sm leading-6">
+          <Text className="font-pixel text-bark text-sm leading-6">
             {hasToday
               ? "Your flower is planted. Tap it to revisit your words, or give your pot a little color."
               : "Choose a flower, leave a few words, and add a small piece of yourself to the garden."}
@@ -144,10 +144,10 @@ export function OutsideScreen({
               {bloom.date} · {bloom.feeling}
             </Label>
           </View>
-          <Text className="text-bark text-base leading-7">
+          <Text className="font-pixel text-bark text-base leading-7">
             {bloom.journal || "A feeling was enough today."}
           </Text>
-          <Text className="text-bark text-xs leading-5 opacity-70">
+          <Text className="font-pixel text-bark text-xs leading-5 opacity-70">
             Your private page. Tending the flower keeps the memory intact.
           </Text>
           {bloom.feeling === "heavy" && (
