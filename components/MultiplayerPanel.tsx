@@ -4,7 +4,7 @@ import { useRoom } from "../store/useRoom";
 import { useVillage } from "../store/useVillage";
 import { Gift } from "../store/gifting";
 import { Shape, palette } from "../store/model";
-import { PixelFlower, PixelPot, Spark } from "./PixelArt";
+import { PixelBouquet, PixelFlower } from "./PixelArt";
 import { PixelButton, Label, Sheet } from "./PixelUI";
 
 export function MultiplayerPanel() {
@@ -207,24 +207,22 @@ export function MultiplayerPanel() {
                 key={senderId}
                 className="flex-row items-center gap-3 bg-[#F4D8B2] p-3"
               >
-                <View style={{ width: 112, height: 130 }}>
-                  {blooms.map((g, i) => (
-                    <View
-                      key={g.id}
-                      style={{
-                        position: "absolute",
-                        left: 6 + i * 22,
-                        top: 26 - i * 12,
-                      }}
-                    >
-                      <PixelFlower shape={g.shape} color={g.color} size={60} />
-                    </View>
-                  ))}
-                  <View style={{ position: "absolute", left: 7, top: 35 }}>
-                    <PixelPot pixels={latest.pot} size={100} />
-                  </View>
-                  <Spark trigger={Date.parse(latest.createdAt)} />
-                </View>
+                <PixelBouquet
+                  flowers={blooms}
+                  pot={latest.pot}
+                  spark={Date.parse(latest.createdAt)}
+                  width={112}
+                  height={130}
+                  flowerSize={60}
+                  potSize={100}
+                  potLeft={7}
+                  potTop={35}
+                  placements={[
+                    { left: 6, top: 26 },
+                    { left: 28, top: 14 },
+                    { left: 50, top: 2 },
+                  ]}
+                />
                 <View className="flex-1 gap-2">
                   <Text className="text-bark font-bold">From {senderName}</Text>
                   <Text className="text-xs text-bark leading-5">

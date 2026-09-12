@@ -11,26 +11,10 @@ import * as Haptics from "expo-haptics";
 import { useVillage } from "../store/useVillage";
 import { Friend } from "../store/model";
 import { MultiplayerPanel } from "../components/MultiplayerPanel";
-import { PixelFlower, PixelPot, Spark } from "../components/PixelArt";
+import { PixelBouquet } from "../components/PixelArt";
 import { Label, PixelButton, Sheet } from "../components/PixelUI";
 function Vase({ friend, spark = 0 }: { friend: Friend; spark?: number }) {
-  return (
-    <View style={{ width: 120, height: 155 }}>
-      <View style={{ position: "absolute", left: 10, top: 50 }}>
-        <PixelFlower {...friend.flowers[0]} size={65} />
-      </View>
-      <View style={{ position: "absolute", left: 30, top: 31 }}>
-        <PixelFlower {...friend.flowers[1]} size={65} />
-      </View>
-      <View style={{ position: "absolute", left: 51, top: 12 }}>
-        <PixelFlower {...friend.flowers[2]} size={65} />
-      </View>
-      <View style={{ position: "absolute", left: 10, top: 58 }}>
-        <PixelPot pixels={friend.pot} size={100} />
-      </View>
-      <Spark trigger={spark} />
-    </View>
-  );
+  return <PixelBouquet flowers={friend.flowers} pot={friend.pot} spark={spark} />;
 }
 export function InsideScreen({
   night,

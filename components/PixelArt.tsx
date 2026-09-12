@@ -10,6 +10,18 @@ import Animated, {
   ReduceMotion,
 } from "react-native-reanimated";
 import { Shape, Pixels } from "../store/model";
+
+type BouquetFlower = {
+  id?: string;
+  shape: Shape;
+  color: string;
+};
+
+const defaultBouquetPlacements = [
+  { left: 10, top: 50 },
+  { left: 30, top: 31 },
+  { left: 51, top: 12 },
+];
 const patterns: Record<Shape, string[]> = {
   daisy: [
     "..PPP..",
@@ -170,6 +182,80 @@ export function PixelPot({
         ),
       )}
     </Svg>
+  );
+}
+export function PixelBouquet({
+  flowers,
+  pot,
+  spark = 0,
+  width = 120,
+  height = 155,
+  flowerSize = 65,
+  potSize = 100,
+  potLeft = 10,
+  potTop = 58,
+  placements = defaultBouquetPlacements,
+}: {
+  flowers: BouquetFlower[];
+  pot: Pixels;
+  spark?: number;
+  width?: number;
+  height?: number;
+  flowerSize?: number;
+  potSize?: number;
+  potLeft?: number;
+  potTop?: number;
+  placements?: { left: number; top: number }[];
+}) {
+  const potRimY = potTop + potSize * 0.35;
+  const potCenterX = potLeft + potSize * 0.5;
+  return (
+    <View style={{ width, height }}>
+      {flowers.map((flower, i) => {
+        const place = placements[i] ?? placements[placements.length - 1];
+        const stemX = place.left + flowerSize * 0.5;
+        const stemBottom = place.top + flowerSize * 0.94;
+        const stemWidth = Math.max(4, Math.round(flowerSize * 0.08));
+        const stemEndY = potRimY + 8;
+        const stemTop = Math.min(stemBottom - 2, stemEndY);
+        return (
+          <View
+            key={`stem-${flower.id ?? i}`}
+            style={{
+              position: "absolute",
+              left: stemX - stemWidth / 2,
+              top: stemTop,
+              width: stemWidth,
+              height: stemEndY - stemTop,
+              backgroundColor: "#4C744A",
+              transform: [
+                { translateX: (potCenterX - stemX) * 0.16 },
+                { rotate: `${(potCenterX - stemX) * 0.08}deg` },
+              ],
+            }}
+          />
+        );
+      })}
+      {flowers.map((flower, i) => {
+        const place = placements[i] ?? placements[placements.length - 1];
+        return (
+          <View
+            key={flower.id ?? `${flower.shape}-${flower.color}-${i}`}
+            style={{ position: "absolute", left: place.left, top: place.top }}
+          >
+            <PixelFlower
+              shape={flower.shape}
+              color={flower.color}
+              size={flowerSize}
+            />
+          </View>
+        );
+      })}
+      <View style={{ position: "absolute", left: potLeft, top: potTop }}>
+        <PixelPot pixels={pot} size={potSize} />
+      </View>
+      <Spark trigger={spark} />
+    </View>
   );
 }
 export function Spark({ trigger }: { trigger: number }) {
