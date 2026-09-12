@@ -32,7 +32,7 @@ export default function App() {
     backgroundColor: interpolateColor(
       sky.value,
       [0, 1],
-      ["#DDE8D8", "#414858"],
+      ["#D7F0E8", "#414858"],
     ),
   }));
   return (
@@ -47,10 +47,10 @@ export default function App() {
             className="flex-1 w-full self-center"
             style={{
               maxWidth: 520,
-              backgroundColor: place === "inside" ? "#EFE0C5" : "#F5ECD7",
+              backgroundColor: place === "inside" ? "#F9E8CB" : "#FFF2DC",
             }}
           >
-            <View className="px-5 pt-4 pb-3 border-b-2 border-[#CBBF9F]">
+            <View className="px-5 pt-4 pb-3 border-b-2 border-[#D8B58A]">
               <View className="flex-row justify-between items-center gap-2">
                 <View>
                   <Text className="font-pixel text-lg font-bold text-bark">
@@ -99,7 +99,7 @@ export default function App() {
                     restart.
                   </Text>
                 )}
-                <View className="flex-row gap-2 p-3 border-t-2 border-[#CBBF9F] bg-cream">
+                <View className="flex-row gap-2 p-3 border-t-2 border-[#D8B58A] bg-cream">
                   {(
                     [
                       { id: "outside", label: "OUTSIDE", icon: "✿" },
@@ -116,14 +116,14 @@ export default function App() {
                       className="flex-1 flex-row gap-2 items-center justify-center py-3 border-2"
                       style={{
                         backgroundColor:
-                          place === item.id ? "#536E4D" : "#F5ECD7",
-                        borderColor: place === item.id ? "#3E503A" : "#DFD2B3",
+                          place === item.id ? "#6B8E3B" : "#FFF2DC",
+                        borderColor: place === item.id ? "#662305" : "#D8B58A",
                       }}
                     >
                       <Text
                         style={{
                           fontSize: 18,
-                          color: place === item.id ? "#FFF4D9" : "#4D3C39",
+                          color: place === item.id ? "#FFF8EA" : "#662305",
                         }}
                       >
                         {item.icon}
@@ -131,7 +131,7 @@ export default function App() {
                       <Text
                         className="font-pixel text-[10px] font-bold"
                         style={{
-                          color: place === item.id ? "#FFF4D9" : "#4D3C39",
+                          color: place === item.id ? "#FFF8EA" : "#662305",
                         }}
                       >
                         {item.label}

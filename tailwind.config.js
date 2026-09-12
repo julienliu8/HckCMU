@@ -1,6 +1,6 @@
 module.exports = {
  content: ['./App.tsx','./components/**/*.{ts,tsx}','./screens/**/*.{ts,tsx}'],
  presets: [require('nativewind/preset')],
- theme: {extend: {colors: {cream:'#FFF4D9',bark:'#4D3C39',moss:'#526C49',peach:'#F4BC92'},fontFamily:{pixel:['monospace']}}},
+ theme: {extend: {colors: {cream:'#FFF4E3',bark:'#662305',moss:'#6B8E3B',peach:'#F5822A'},fontFamily:{pixel:['monospace']}}},
  plugins: [],
 };

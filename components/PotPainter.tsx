@@ -19,7 +19,7 @@ export function PotPainter({
   return (
     <View className="gap-4">
       <View className="flex-row flex-wrap gap-2">
-        {[...palette, "#765043", null].map((c, i) => (
+        {[...palette, "#9E451C", "#662305", null].map((c, i) => (
           <Pressable
             key={i}
             accessibilityRole="button"
@@ -29,9 +29,9 @@ export function PotPainter({
             style={{
               width: 34,
               height: 34,
-              backgroundColor: c ?? "#FFF4D9",
+              backgroundColor: c ?? "#FFF4E3",
               borderWidth: brush === c ? 3 : 1,
-              borderColor: "#4D3C39",
+              borderColor: "#662305",
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -46,8 +46,8 @@ export function PotPainter({
           maxWidth: 300,
           aspectRatio: 1,
           borderWidth: 2,
-          borderColor: "#765043",
-          backgroundColor: "#F1E4C9",
+          borderColor: "#9E451C",
+          backgroundColor: "#FFF4E3",
         }}
         onLayout={(e) => setWidth(e.nativeEvent.layout.width - 4)}
         accessibilityLabel="20 by 20 pot painting canvas. Drag or tap to paint pixels."
@@ -74,8 +74,8 @@ export function PotPainter({
                   y={y}
                   width="1"
                   height="1"
-                  fill={c ?? ((x + y) % 2 ? "#E9DDBF" : "#F7EACF")}
-                  stroke="#D6C8A9"
+                  fill={c ?? ((x + y) % 2 ? "#F2E7D2" : "#FFF7EA")}
+                  stroke="#D8B58A"
                   strokeWidth=".035"
                 />
               )),

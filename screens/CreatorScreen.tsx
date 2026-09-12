@@ -42,7 +42,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
             No right color. No perfect words. Just you.
           </Text>
         </View>
-        <View className="items-center py-2 bg-[#E8DFC4] border-2 border-[#CAB996]">
+        <View className="items-center py-2 bg-[#F4D8B2] border-2 border-[#D6A775]">
           <View style={{ height: 154, width: 130 }}>
             <View style={{ position: "absolute", top: 0, left: 28 }}>
               <PixelFlower
@@ -77,9 +77,9 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
                 onPress={() => setDraft({ shape })}
                 className="items-center border-2 px-5 py-3"
                 style={{
-                  borderColor: draft.shape === shape ? "#526C49" : "#D6C6A5",
+                  borderColor: draft.shape === shape ? "#6B8E3B" : "#D8B58A",
                   backgroundColor:
-                    draft.shape === shape ? "#DFE5C6" : "#FFF4D9",
+                    draft.shape === shape ? "#E7F2D2" : "#FFF4E3",
                 }}
               >
                 <PixelFlower shape={shape} color={draft.color} />
@@ -111,7 +111,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
                     borderRadius: 22,
                     backgroundColor: color,
                     borderWidth: draft.color === color ? 4 : 2,
-                    borderColor: draft.color === color ? "#4D3C39" : "#FFF4D9",
+                    borderColor: draft.color === color ? "#662305" : "#FFF4E3",
                   }}
                 />
               );
@@ -137,9 +137,9 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
                 className="flex-1 py-4 items-center border-2"
                 style={{
                   borderColor:
-                    draft.feeling === feeling ? "#526C49" : "#D6C6A5",
+                    draft.feeling === feeling ? "#6B8E3B" : "#D8B58A",
                   backgroundColor:
-                    draft.feeling === feeling ? "#DFE5C6" : "#FFF4D9",
+                    draft.feeling === feeling ? "#E7F2D2" : "#FFF4E3",
                 }}
               >
                 <Text className="font-pixel text-xs text-bark">{feeling}</Text>
@@ -160,9 +160,9 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
             value={draft.journal}
             onChangeText={(journal) => setDraft({ journal })}
             placeholder="What’s on your mind today?"
-            placeholderTextColor="#998773"
+            placeholderTextColor="#9E7A5D"
             textAlignVertical="top"
-            className="border-2 border-[#CAB996] bg-cream p-4 text-bark text-base"
+            className="border-2 border-[#D8B58A] bg-cream p-4 text-bark text-base"
             style={{ minHeight: 140, lineHeight: 25 }}
           />
           <Text className="font-pixel text-[9px] text-bark">
@@ -202,4 +202,3 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
     </KeyboardAvoidingView>
   );
 }
-

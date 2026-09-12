@@ -71,7 +71,7 @@ export function InsideScreen({ night }: { night: number }) {
         <View
           className="border-2 border-b-8 border-bark"
           style={{
-            backgroundColor: "#E6CFAB",
+            backgroundColor: "#F0C98F",
             paddingTop: 18,
             paddingBottom: 16,
           }}
@@ -81,7 +81,7 @@ export function InsideScreen({ night }: { night: number }) {
             style={{
               width: 98,
               height: 70,
-              backgroundColor: night > 0.5 ? "#4D586D" : "#BBD1C6",
+              backgroundColor: night > 0.5 ? "#4D586D" : "#9EDAF0",
             }}
           >
             <View
@@ -133,14 +133,14 @@ export function InsideScreen({ night }: { night: number }) {
                   style={{
                     height: 13,
                     width: "100%",
-                    backgroundColor: "#A57753",
+                    backgroundColor: "#9E451C",
                     borderTopWidth: 4,
                     borderBottomWidth: 3,
-                    borderColor: "#684B3C",
+                    borderColor: "#662305",
                   }}
                 />
                 <View
-                  style={{ width: 9, height: 11, backgroundColor: "#805B43" }}
+                     style={{ width: 9, height: 11, backgroundColor: "#662305" }}
                 />
               </View>
             ))}
