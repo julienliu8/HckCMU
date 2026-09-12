@@ -27,7 +27,15 @@ const demoFriendNotes = [
   "This flower felt like good luck, so I sent it over.",
 ];
 
+const demoHeavyPlantEntries = [
+  "The day felt crowded, so I left the thought here to come back to gently.",
+  "I kept carrying this around. It can live in the garden for a while.",
+  "A hard little patch from today. Pruning it might help me mark that it passed.",
+  "I felt stuck this afternoon. Naming it makes it easier to tend.",
+];
+
 let demoFriendNoteIndex = 0;
+let demoHeavyPlantIndex = 0;
 
 type VillageState = {
   history: Bloom[];
@@ -47,6 +55,7 @@ type VillageState = {
   resetPot: () => void;
   prune: (id: string) => void;
   plant: () => boolean;
+  seedHeavyPlant: () => Bloom;
   demoFriendBloom: (friendId?: string) => {
     friendId: string;
     friendName: string;
@@ -113,6 +122,25 @@ export const useVillage = create<VillageState>()(
           draft: { ...s.draft, journal: "" },
         }));
         return true;
+      },
+      seedHeavyPlant: () => {
+        const demoDate = new Date();
+        demoDate.setDate(demoDate.getDate() - ((demoHeavyPlantIndex % 9) + 1));
+        const bloom: Bloom = {
+          id: `demo-heavy-${Date.now()}-${demoHeavyPlantIndex}`,
+          date: localDay(demoDate),
+          shape: flowerShapes[(demoHeavyPlantIndex + 6) % flowerShapes.length],
+          color: palette[(demoHeavyPlantIndex + 3) % palette.length],
+          feeling: "heavy",
+          journal:
+            demoHeavyPlantEntries[
+              demoHeavyPlantIndex % demoHeavyPlantEntries.length
+            ],
+          pruned: false,
+        };
+        demoHeavyPlantIndex++;
+        set((s) => ({ history: [...s.history, bloom] }));
+        return bloom;
       },
       demoFriendBloom: (friendId) => {
         const friends = get().friends;

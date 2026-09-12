@@ -15,10 +15,14 @@ export function OutsideScreen({
   onEnterHouse: () => void;
 }) {
   const history = useVillage((s) => s.history),
-    prune = useVillage((s) => s.prune);
+    prune = useVillage((s) => s.prune),
+    seedHeavyPlant = useVillage((s) => s.seedHeavyPlant);
   const [selected, setSelected] = useState<string | null>(null);
   const bloom = history.find((b) => b.id === selected);
   const hasToday = history.some((b) => b.date === localDay());
+  const pruningCount = history.filter(
+    (b) => b.feeling === "heavy" && !b.pruned,
+  ).length;
   return (
     <>
       <ScrollView
@@ -44,7 +48,9 @@ export function OutsideScreen({
               YOUR LITTLE PATCH
             </Text>
             <Text className="font-pixel text-[10px] text-bark">
-              {history.length} DAYS GROWN
+              {pruningCount
+                ? `${pruningCount} HEAVY ${pruningCount === 1 ? "PLANT" : "PLANTS"} TO PRUNE`
+                : `${history.length} DAYS GROWN`}
             </Text>
           </View>
           <View
@@ -56,46 +62,86 @@ export function OutsideScreen({
               borderColor: "#9E451C",
             }}
           >
-            {history.map((b) => (
-              <Pressable
-                key={b.id}
-                accessibilityRole="button"
-                accessibilityLabel={`${b.date}, ${b.feeling}${b.feeling === "heavy" && !b.pruned ? ", weeds to prune" : ""}${b.pruned ? ", pruned" : ""}`}
-                onPress={() => setSelected(b.id)}
-                style={({ pressed }) => ({
-                  width: "14.285714%",
-                  minHeight: 78,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: pressed ? "#D69356" : "#CF8A4C",
-                  borderWidth: 2,
-                  borderColor: "#9E451C",
-                })}
-              >
-                <PixelFlower
-                  shape={b.shape}
-                  color={b.color}
-                  size={42}
-                  weedy={b.feeling === "heavy" && !b.pruned}
-                  glow={b.feeling === "bright"}
-                />
-                <Text
-                  className="font-pixel text-[9px]"
-                  style={{ color: "#FFF4E3" }}
+            {history.map((b) => {
+              const needsPruning = b.feeling === "heavy" && !b.pruned;
+              return (
+                <Pressable
+                  key={b.id}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${b.date}, ${b.feeling}${needsPruning ? ", needs pruning" : ""}${b.pruned ? ", pruned" : ""}`}
+                  onPress={() => setSelected(b.id)}
+                  style={({ pressed }) => ({
+                    width: "14.285714%",
+                    minHeight: 78,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: pressed ? "#D69356" : "#CF8A4C",
+                    borderWidth: 2,
+                    borderColor: "#9E451C",
+                    position: "relative",
+                  })}
                 >
-                  {Number(b.date.slice(-2))}
-                </Text>
-              </Pressable>
-            ))}
+                  {needsPruning && (
+                    <View
+                      pointerEvents="none"
+                      style={{
+                        position: "absolute",
+                        top: 5,
+                        right: 4,
+                        alignItems: "center",
+                      }}
+                    >
+                      <View
+                        style={{
+                          paddingHorizontal: 3,
+                          paddingVertical: 1,
+                          backgroundColor: "#F6D9AD",
+                          borderWidth: 1,
+                          borderColor: "#9E451C",
+                          opacity: 0.92,
+                        }}
+                      >
+                        <Text className="font-pixel text-[7px] text-bark">
+                          prune
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                  <PixelFlower
+                    shape={b.shape}
+                    color={b.color}
+                    size={42}
+                    weedy={needsPruning}
+                    glow={b.feeling === "bright"}
+                  />
+                  <Text
+                    className="font-pixel text-[9px]"
+                    style={{ color: "#FFF4E3" }}
+                  >
+                    {Number(b.date.slice(-2))}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
           <View className="flex-row justify-between mt-3">
             <Text className="font-pixel text-[9px] text-bark">✦ bright</Text>
             <Text className="font-pixel text-[9px] text-bark">
-              ❧ needs tending
+              heavy vines = prune when ready
             </Text>
             <Text className="font-pixel text-[9px] text-bark">
               tap to reflect
             </Text>
+          </View>
+          <View className="mt-3">
+            <PixelButton
+              light
+              label="SEED HEAVY PLANT +"
+              onPress={() => {
+                const bloom = seedHeavyPlant();
+                setSelected(bloom.id);
+              }}
+            />
           </View>
         </View>
         <View className="m-6 p-5 gap-4 border-2 border-b-4 border-bark bg-cream">
