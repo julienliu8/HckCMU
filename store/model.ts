@@ -22,26 +22,24 @@ export type Friend = {
   ];
 };
 export const palette = [
-  "#E69AAE",
-  "#F4C76B",
-  "#B4C981",
-  "#81BCAB",
-  "#93B3D8",
-  "#B5A0D0",
-  "#E99C73",
-  "#EEE1C4",
+  "#D64545",
+  "#F5822A",
+  "#F7C948",
+  "#6B8E3B",
+  "#4F9ED9",
+  "#74BCA8",
 ];
 export const localDay = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
-export function makePot(base = "#C88167", accent = "#F7D797"): Pixels {
+export function makePot(base = "#9E451C", accent = "#F7C948"): Pixels {
   return Array.from({ length: 20 }, (_, y) =>
     Array.from({ length: 20 }, (_, x) => {
       if (y < 7 || y > 18) return null;
       if (y < 10)
-        return x >= 2 && x <= 17 ? (y === 7 ? "#65483D" : accent) : null;
+        return x >= 2 && x <= 17 ? (y === 7 ? "#662305" : accent) : null;
       const inset = y > 16 ? 5 : y > 12 ? 4 : 3;
       if (x < inset || x > 19 - inset) return null;
-      if (x === inset || x === 19 - inset || y === 18) return "#765043";
+      if (x === inset || x === 19 - inset || y === 18) return "#662305";
       if (y >= 12 && y <= 14 && x >= 8 && x <= 11) return accent;
       return base;
     }),
@@ -105,7 +103,7 @@ export const mockFriends: Friend[] = [
     id: "maya",
     name: "Maya",
     note: "a little sunshine",
-    pot: makePot("#C98287", "#F6D4A2"),
+    pot: makePot("#C46A3D", "#F7C948"),
     flowers: [
       { shape: "daisy", color: palette[0] },
       { shape: "tulip", color: palette[1] },
@@ -116,7 +114,7 @@ export const mockFriends: Friend[] = [
     id: "ian",
     name: "Ian",
     note: "taking it slowly",
-    pot: makePot("#839AB7", "#CBDBE0"),
+    pot: makePot("#4F9ED9", "#74BCA8"),
     flowers: [
       { shape: "star", color: palette[4] },
       { shape: "daisy", color: palette[5] },
@@ -127,7 +125,7 @@ export const mockFriends: Friend[] = [
     id: "leo",
     name: "Leo",
     note: "finding my rhythm",
-    pot: makePot("#8F9E73", "#E6DFB0"),
+    pot: makePot("#6B8E3B", "#F7C948"),
     flowers: [
       { shape: "tulip", color: palette[6] },
       { shape: "star", color: palette[2] },

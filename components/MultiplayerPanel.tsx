@@ -70,8 +70,8 @@ export function MultiplayerPanel() {
             }}
             className="flex-1 border-2 p-3 items-center"
             style={{
-              borderColor: "#526C49",
-              backgroundColor: mode === value ? "#DEE6C7" : "#FFF4D9",
+              borderColor: "#6B8E3B",
+              backgroundColor: mode === value ? "#E7F2D2" : "#FFF4E3",
             }}
           >
             <Text className="font-pixel text-[10px] text-bark">
@@ -136,8 +136,8 @@ export function MultiplayerPanel() {
             }}
             className="border px-3 py-3"
             style={{
-              borderColor: "#526C49",
-              backgroundColor: p.id === person ? "#DEE6C7" : "#FFF4D9",
+              borderColor: "#6B8E3B",
+              backgroundColor: p.id === person ? "#E7F2D2" : "#FFF4E3",
             }}
           >
             <Text className="text-xs text-bark">{p.name}</Text>
@@ -159,7 +159,7 @@ export function MultiplayerPanel() {
           {error}
         </Text>
       )}
-      <View className="border-t border-[#CAB996] pt-4 gap-3">
+      <View className="border-t border-[#D8B58A] pt-4 gap-3">
         <Text className="font-pixel text-xs text-bark">
           ARRIVALS FOR {personName(person).toUpperCase()} · {received.length}
         </Text>
@@ -177,7 +177,7 @@ export function MultiplayerPanel() {
             return (
               <View
                 key={sender}
-                className="flex-row items-center gap-3 bg-[#E8DFC4] p-3"
+                className="flex-row items-center gap-3 bg-[#F4D8B2] p-3"
               >
                 <View style={{ width: 112, height: 130 }}>
                   {blooms.map((g, i) => (
@@ -241,8 +241,8 @@ export function MultiplayerPanel() {
                   }}
                   className="border-2 p-3"
                   style={{
-                    borderColor: recipient === p.id ? "#526C49" : "#CAB996",
-                    backgroundColor: recipient === p.id ? "#DEE6C7" : "#FFF4D9",
+                    borderColor: recipient === p.id ? "#6B8E3B" : "#D8B58A",
+                    backgroundColor: recipient === p.id ? "#E7F2D2" : "#FFF4E3",
                   }}
                 >
                   <Text className="text-bark">{p.name}</Text>
@@ -262,7 +262,7 @@ export function MultiplayerPanel() {
                 }}
                 style={{
                   borderWidth: 2,
-                  borderColor: shape === s ? "#526C49" : "transparent",
+                  borderColor: shape === s ? "#6B8E3B" : "transparent",
                 }}
               >
                 <PixelFlower shape={s} color={color} size={66} />
@@ -286,7 +286,7 @@ export function MultiplayerPanel() {
                   borderRadius: 17,
                   backgroundColor: c,
                   borderWidth: color === c ? 3 : 0,
-                  borderColor: "#4D3C39",
+                  borderColor: "#662305",
                 }}
               />
             ))}
@@ -331,4 +331,3 @@ export function MultiplayerPanel() {
     </View>
   );
 }
-

@@ -20,13 +20,13 @@ export function PixelButton({
       onPress={onPress}
       className="border-2 border-b-4 border-bark px-5 py-3 items-center active:opacity-80"
       style={{
-        backgroundColor: light ? "#F5E4BE" : "#536E4D",
+        backgroundColor: light ? "#FFF4E3" : "#6B8E3B",
         opacity: disabled ? 0.5 : 1,
       }}
     >
       <Text
         className="font-pixel text-xs font-bold"
-        style={{ color: light ? "#4D3C39" : "#FFF4D9" }}
+        style={{ color: light ? "#662305" : "#FFF8EA" }}
       >
         {label}
       </Text>
@@ -61,7 +61,7 @@ export function Sheet({
           style={{
             maxWidth: 520,
             maxHeight: "95%",
-            backgroundColor: "#FFF4D9",
+            backgroundColor: "#FFF4E3",
           }}
         >
           <View className="flex-row justify-between items-center px-5 py-4 border-b-2 border-bark">

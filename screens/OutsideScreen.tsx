@@ -38,7 +38,7 @@ export function OutsideScreen({
         <Landscape night={night} />
         <View
           className="mx-4 p-4 border-2 border-b-8"
-          style={{ backgroundColor: "#C6AD85", borderColor: "#8E7054" }}
+          style={{ backgroundColor: "#DFA66E", borderColor: "#9E451C" }}
         >
           <View className="flex-row justify-between items-center mb-4">
             <Text className="font-pixel font-bold text-xs text-bark">
@@ -51,10 +51,10 @@ export function OutsideScreen({
           <View
             className="flex-row flex-wrap"
             style={{
-              backgroundColor: "#987653",
+              backgroundColor: "#C9874C",
               padding: 3,
               borderWidth: 2,
-              borderColor: "#765A45",
+              borderColor: "#9E451C",
             }}
           >
             {history.map((b) => (
@@ -68,9 +68,9 @@ export function OutsideScreen({
                   minHeight: 78,
                   alignItems: "center",
                   justifyContent: "center",
-                  backgroundColor: pressed ? "#B49770" : "#AD8D65",
+                  backgroundColor: pressed ? "#D69356" : "#CF8A4C",
                   borderWidth: 2,
-                  borderColor: "#987653",
+                  borderColor: "#9E451C",
                 })}
               >
                 <PixelFlower
@@ -82,7 +82,7 @@ export function OutsideScreen({
                 />
                 <Text
                   className="font-pixel text-[9px]"
-                  style={{ color: "#FBE6BE" }}
+                  style={{ color: "#FFF4E3" }}
                 >
                   {Number(b.date.slice(-2))}
                 </Text>
