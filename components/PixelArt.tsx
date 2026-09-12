@@ -78,6 +78,64 @@ const patterns: Record<Shape, string[]> = {
     "...P...",
     ".......",
   ],
+  peony: [
+    ".P.PP.P.",
+    "PPPPPPPP",
+    "PPPPPPPP",
+    "PPPPPPPP",
+    "PPPPPPPP",
+    ".PPPPPP.",
+    "..PPPP..",
+  ],
+  chamomile: [
+    "....PP....",
+    "...PPPP...",
+    "...PPPP...",
+    ".PPPPPPPP.",
+    "PPPPPPPPPP",
+    "PPPPCCPPPP",
+    "PPPPCCPPPP",
+    "PPPPPPPPPP",
+    "..PPPPPP..",
+    "..PPPPPP..",
+    "...PPPP...",
+  ],
+  jasmine: [
+    "....PP....",
+    "...PPPP...",
+    "...PPPP...",
+    ".PPPPPPPP.",
+    "PPPPCCPPPP",
+    "PPPPCCPPPP",
+    ".PPPPPPPP.",
+    "..PPPPPP..",
+    "..PPPPPP..",
+    "....PP....",
+  ],
+  primrose: [
+    "....PPPP..",
+    "....PPPP..",
+    "PPPPPPPP..",
+    "PPPPPPPP..",
+    "PPPPCCPPPP",
+    "PPPPCCPPPP",
+    "..PPPPPPPP",
+    "..PPPPPPPP",
+    "..PPPP....",
+    "..PPPP....",
+  ],
+  buttercup: [
+    "...PPPP...",
+    "..PPPPPP..",
+    "..PPPPPP..",
+    "PPPCCCCPPP",
+    "PPPCCCCPPP",
+    "PPPCCCCPPP",
+    "PPPCCCCPPP",
+    "..PPPPPP..",
+    "..PPPPPP..",
+    "...PPPP...",
+  ],
 };
 export function PixelFlower({
   shape,
@@ -112,6 +170,9 @@ export function PixelFlower({
   const flower = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+  const pattern = patterns[shape];
+  const headOffsetX = Math.floor((16 - pattern[0].length) / 2);
+  const headOffsetY = pattern.length > 7 ? 0 : 1;
   return (
     <View style={{ width: size, height: size }} pointerEvents="none">
       <Animated.View style={flower}>
@@ -142,15 +203,15 @@ export function PixelFlower({
           <Rect x="4" y="11" width="3" height="2" fill="#799358" />
           <Rect x="3" y="10" width="2" height="2" fill="#94AC6A" />
           <Rect x="9" y="13" width="3" height="2" fill="#799358" />
-          {patterns[shape].flatMap((row, y) =>
+          {pattern.flatMap((row, y) =>
             row
               .split("")
               .map((p, x) =>
                 p === "." ? null : (
                   <Rect
                     key={`${x}-${y}`}
-                    x={x + 4}
-                    y={y + 1}
+                    x={x + headOffsetX}
+                    y={y + headOffsetY}
                     width="1"
                     height="1"
                     fill={p === "C" ? "#FFF0B3" : color}

@@ -19,6 +19,11 @@ const giftShapes: readonly Shape[] = [
   "rose",
   "sunflower",
   "lavender",
+  "peony",
+  "chamomile",
+  "jasmine",
+  "primrose",
+  "buttercup",
 ];
 export const MAX_GIFT_NOTE_LENGTH = 160;
 /** Shared data is intentionally allowlisted. No journal or draft object can enter a gift. */

@@ -5,6 +5,11 @@ export const flowerShapes = [
   "rose",
   "sunflower",
   "lavender",
+  "peony",
+  "chamomile",
+  "jasmine",
+  "primrose",
+  "buttercup",
 ] as const;
 export type Shape = (typeof flowerShapes)[number];
 export type Feeling = "bright" | "quiet" | "heavy";
