@@ -12,6 +12,14 @@ export type Gift = {
 };
 const hex = /^#[0-9a-f]{6}$/i;
 const idPattern = /^[a-z0-9-]{3,32}$/;
+const giftShapes: readonly Shape[] = [
+  "daisy",
+  "tulip",
+  "star",
+  "rose",
+  "sunflower",
+  "lavender",
+];
 export const MAX_GIFT_NOTE_LENGTH = 160;
 /** Shared data is intentionally allowlisted. No journal or draft object can enter a gift. */
 export function validateGift(input: unknown): Gift {
@@ -44,7 +52,7 @@ export function validateGift(input: unknown): Gift {
   if (typeof g.senderName !== "string" || !g.senderName.trim())
     throw new Error("Sender name is required");
   if (
-    !["daisy", "tulip", "star"].includes(String(g.shape)) ||
+    !giftShapes.includes(g.shape as Shape) ||
     typeof g.color !== "string" ||
     !hex.test(g.color)
   )

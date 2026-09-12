@@ -1,4 +1,12 @@
-export type Shape = "daisy" | "tulip" | "star";
+export const flowerShapes = [
+  "daisy",
+  "tulip",
+  "star",
+  "rose",
+  "sunflower",
+  "lavender",
+] as const;
+export type Shape = (typeof flowerShapes)[number];
 export type Feeling = "bright" | "quiet" | "heavy";
 export type Pixels = (string | null)[][];
 export type Bloom = {
@@ -85,7 +93,7 @@ export function createHistory(now = new Date()): Bloom[] {
     return {
       id: `seed-${i}`,
       date: localDay(d),
-      shape: (["daisy", "tulip", "star"] as Shape[])[i % 3],
+      shape: flowerShapes[i % flowerShapes.length],
       color: palette[i % palette.length],
       feeling: (
         [

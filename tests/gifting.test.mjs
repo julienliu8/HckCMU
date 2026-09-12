@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createDemoServer } from "../server/demo.mjs";
-import { makePot } from "../store/model.ts";
+import { flowerShapes, makePot } from "../store/model.ts";
 import { validateGift } from "../store/gifting.ts";
 const gift = {
   id: "test-gift",
@@ -25,6 +25,9 @@ test("shared payload rejects journals and invalid pixels", () => {
     ...gift,
     note: "thinking of you",
   });
+  for (const shape of flowerShapes) {
+    assert.equal(validateGift({ ...gift, shape }).shape, shape);
+  }
 });
 test("live server delivers across clients, isolates rooms, and deduplicates retries", async () => {
   const server = createDemoServer();

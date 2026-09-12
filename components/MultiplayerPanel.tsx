@@ -3,7 +3,7 @@ import { View, Text, Pressable, TextInput } from "react-native";
 import { useRoom } from "../store/useRoom";
 import { useVillage } from "../store/useVillage";
 import { Gift, MAX_GIFT_NOTE_LENGTH } from "../store/gifting";
-import { MAX_FRIENDS, Shape, palette } from "../store/model";
+import { MAX_FRIENDS, Shape, flowerShapes, palette } from "../store/model";
 import { PixelBouquet, PixelFlower, PixelNoteTag } from "./PixelArt";
 import { PixelButton, Label, Sheet } from "./PixelUI";
 
@@ -340,8 +340,8 @@ export function MultiplayerPanel() {
               </Pressable>
             ))}
           </View>
-          <View className="flex-row justify-center gap-4">
-            {(["daisy", "tulip", "star"] as Shape[]).map((s) => (
+          <View className="flex-row justify-center gap-4 flex-wrap">
+            {flowerShapes.map((s) => (
               <Pressable
                 key={s}
                 accessibilityRole="button"

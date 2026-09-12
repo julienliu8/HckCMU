@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 import { useVillage } from "../store/useVillage";
-import { Shape, Feeling, palette, localDay } from "../store/model";
+import { Feeling, flowerShapes, palette, localDay } from "../store/model";
 import { PixelFlower, PixelPot } from "../components/PixelArt";
 import { PixelButton, Label } from "../components/PixelUI";
 import { PotPainter } from "../components/PotPainter";
@@ -68,7 +68,7 @@ export function CreatorScreen({ onDone }: { onDone: () => void }) {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 12 }}
           >
-            {(["daisy", "tulip", "star"] as Shape[]).map((shape) => (
+            {flowerShapes.map((shape) => (
               <Pressable
                 key={shape}
                 accessibilityRole="button"

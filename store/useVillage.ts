@@ -16,6 +16,7 @@ import {
   localDay,
   palette,
   MAX_FRIENDS,
+  flowerShapes,
 } from "./model";
 
 const demoFriendNotes = [
@@ -114,7 +115,6 @@ export const useVillage = create<VillageState>()(
         return true;
       },
       demoFriendBloom: (friendId) => {
-        const shapes: Shape[] = ["daisy", "tulip", "star"];
         const friends = get().friends;
         const index = friendId
           ? friends.findIndex((friend) => friend.id === friendId)
@@ -125,7 +125,7 @@ export const useVillage = create<VillageState>()(
         demoFriendNoteIndex++;
         const nextFlower: FriendFlower = {
           id: `demo-bloom-${Date.now()}-${demoFriendNoteIndex}`,
-          shape: shapes[Math.floor(Math.random() * shapes.length)],
+          shape: flowerShapes[Math.floor(Math.random() * flowerShapes.length)],
           color: palette[Math.floor(Math.random() * palette.length)],
           note,
         };

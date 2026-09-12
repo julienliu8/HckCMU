@@ -51,6 +51,33 @@ const patterns: Record<Shape, string[]> = {
     ".P.P.P.",
     "...P...",
   ],
+  rose: [
+    "..PPP..",
+    ".PPCP..",
+    "PPCCPP.",
+    ".PCPPP.",
+    "..PP...",
+    "...P...",
+    ".......",
+  ],
+  sunflower: [
+    ".P.P.P.",
+    "PPPCPPP",
+    ".PCCCP.",
+    "PPCCCPP",
+    ".PCCCP.",
+    "PPPCPPP",
+    ".P.P.P.",
+  ],
+  lavender: [
+    "...P...",
+    "..PP...",
+    "...PP..",
+    "..PP...",
+    "...PP..",
+    "...P...",
+    ".......",
+  ],
 };
 export function PixelFlower({
   shape,
